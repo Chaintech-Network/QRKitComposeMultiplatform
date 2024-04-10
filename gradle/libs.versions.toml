@@ -11,7 +11,7 @@ androidx-uiTest = "1.6.5"
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
-qr-code = { module = "network.chaintech:qr-kit", version = "1.0.0" }
+qr-code = { module = "network.chaintech:qr-kit", version = "1.0.2" }
 
 [plugins]
 
