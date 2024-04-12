@@ -1,5 +1,6 @@
 # QRKit - Compose Multiplatfrom
 QRKit is a Kotlin Multiplatform library for Qr-Scan in your Android or iOS App.
+![Hero-image - Scan QR](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/ca255070-c4c7-4693-b52a-4cb27143bb40)
 
 
 ## Installation
@@ -8,7 +9,7 @@ Add the dependency to your `build.gradle.kts` file:
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:kmp-date-time-picker:1.0.2")
+    implementation("network.chaintech:qr-kit:1.0.2")
 }
 ```
 
@@ -22,6 +23,8 @@ https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/1
 
 
 ### iOS
+https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/60bfd192-3fbb-4509-940a-9ae44caaeeb2
+
 
 
 ### Add Permissions in Android and iOS
