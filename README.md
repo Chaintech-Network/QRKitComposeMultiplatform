@@ -1,7 +1,7 @@
 # QRKit - Compose Multiplatfrom
 QRKit is a Kotlin Multiplatform library for Qr-Scan in your Android or iOS App.
-![Hero-image - Scan QR](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/ca255070-c4c7-4693-b52a-4cb27143bb40)
 
+![Hero-image - QR generator  amp;amp; scanner 2](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/b270c630-c4a4-49be-be53-d0b9693c0a80)
 
 ## Installation
 
@@ -64,6 +64,56 @@ QrScanner(
 * `onCompletion`: Callback invoked when a QR code is successfully scanned.
 * `onGalleryCallBackHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
 * `onFailure`: Callback invoked when there's a failure during QR code scanning.
+
+### QrCode Generator
+
+![image](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/470f6547-5121-4c19-ab51-74c14bf284ba)
+
+### Example
+
+```kotlin
+QRCodeImage(
+    url: String,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
+    onSuccess: (ImageBitmap) -> Unit = { qrImage -> },
+    onFailure: (String) -> Unit = { message -> }
+)
+```
+
+- And also use below function to generate qrcode
+
+```kotlin
+fun generateQrCode(
+    url: String,
+    onSuccess: (String, ImageBitmap) -> Unit,
+    onFailure: (String) -> Unit
+) {
+    try {
+        val imageBitmap = generateCode(url)
+        onSuccess(url, imageBitmap)
+    } catch (e: Exception) {
+        onFailure("${e.message}")
+    }
+}
+```
+
+* `url`: The URL of the QR code image to be displayed.
+* `contentDescription`: A textual description of the image content for accessibility purposes. It's optional.
+* `modifier`: Modifier for modifying the layout of the QR code image.
+* `alignment`: Alignment of the QR code image within its layout bounds. Default is Alignment.Center.
+* `contentScale`: The scale strategy for fitting the QR code image content within its layout bounds. Default is ContentScale.Fit.
+* `alpha`: The opacity of the QR code image, ranging from 0.0 (fully transparent) to 1.0 (fully opaque). Default is DefaultAlpha.
+* `colorFilter`: A color filter to apply to the QR code image. Default is null.
+* `filterQuality`: The quality of the filtering applied to the QR code image. Default is DrawScope.DefaultFilterQuality.
+* `onSuccess`: Callback invoked when the QR code image is successfully loaded and decoded, passing the decoded ImageBitmap as a parameter.
+* `onFailure`: Callback invoked when there's a failure during loading or decoding the QR code image, passing an error message as a parameter.
+
 
 ## Tech Stack
 * Compose Multiplatform
