@@ -5,13 +5,17 @@ compose = "1.6.1"
 agp = "8.2.2"
 androidx-activityCompose = "1.8.2"
 androidx-uiTest = "1.6.5"
+voyagerVersion = "1.0.0"
 
 [libraries]
 
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
-qr-code = { module = "network.chaintech:qr-kit", version = "1.0.2" }
+qr-code = { module = "network.chaintech:qr-kit", version = "1.0.3" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
+voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerVersion" }
 
 [plugins]
 
