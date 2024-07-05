@@ -9,7 +9,7 @@ Add the dependency to your `build.gradle.kts` file:
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:1.0.2")
+    implementation("network.chaintech:qr-kit:1.0.4")
 }
 ```
 
