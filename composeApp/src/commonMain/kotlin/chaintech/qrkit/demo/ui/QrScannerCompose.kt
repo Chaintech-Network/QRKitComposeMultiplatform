@@ -41,6 +41,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chaintech.qrkit.demo.LocalSnackBarHostState
+import chaintech.qrkit.demo.platformName
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import qrkitcomposemultiplatform.composeapp.generated.resources.Res
@@ -52,7 +53,7 @@ fun QrScannerCompose() {
     var qrCodeURL by remember { mutableStateOf("") }
     var startBarCodeScan by remember { mutableStateOf(false) }
     var flashlightOn by remember { mutableStateOf(false) }
-    var launchGallery by remember { mutableStateOf(value = false) }
+    var openImagePicker by remember { mutableStateOf(value = false) }
     val snackBarHostState = LocalSnackBarHostState.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -74,11 +75,15 @@ fun QrScannerCompose() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
-                        modifier = Modifier
-                            .size(250.dp)
-                            .clip(shape = RoundedCornerShape(size = 14.dp))
-                            .clipToBounds()
-                            .border(2.dp, Color.Gray, RoundedCornerShape(size = 14.dp)),
+                        modifier = if (platformName() != "Desktop") {
+                            Modifier
+                                .size(250.dp)
+                                .clip(shape = RoundedCornerShape(size = 14.dp))
+                                .clipToBounds()
+                                .border(2.dp, Color.Gray, RoundedCornerShape(size = 14.dp))
+                        } else {
+                            Modifier
+                        },
                         contentAlignment = Alignment.Center
                     ) {
                         QrScanner(
@@ -86,13 +91,13 @@ fun QrScannerCompose() {
                                 .clipToBounds()
                                 .clip(shape = RoundedCornerShape(size = 14.dp)),
                             flashlightOn = flashlightOn,
-                            launchGallery = launchGallery,
+                            openImagePicker = openImagePicker,
                             onCompletion = {
                                 qrCodeURL = it
                                 startBarCodeScan = false
                             },
-                            onGalleryCallBackHandler = {
-                                launchGallery = it
+                            imagePickerHandler = {
+                                openImagePicker = it
                             },
                             onFailure = {
                                 coroutineScope.launch {
@@ -106,45 +111,62 @@ fun QrScannerCompose() {
                         )
                     }
 
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 20.dp, end = 20.dp, top = 30.dp)
-                            .background(
-                                color = Color(0xFFF9F9F9),
-                                shape = RoundedCornerShape(25.dp)
-                            )
-                            .height(35.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
+                    if (platformName() != "Desktop") {
+                        Box(
                             modifier = Modifier
-                                .padding(vertical = 5.dp, horizontal = 18.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(11.dp)
+                                .padding(start = 20.dp, end = 20.dp, top = 30.dp)
+                                .background(
+                                    color = Color(0xFFF9F9F9),
+                                    shape = RoundedCornerShape(25.dp)
+                                )
+                                .height(35.dp),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Icon(imageVector = if (flashlightOn) Icons.Filled.FlashOn else Icons.Filled.FlashOff,
-                                "flash",
+                            Row(
                                 modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable {
-                                        flashlightOn = !flashlightOn
-                                    })
+                                    .padding(vertical = 5.dp, horizontal = 18.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(11.dp)
+                            ) {
+                                Icon(imageVector = if (flashlightOn) Icons.Filled.FlashOn else Icons.Filled.FlashOff,
+                                    "flash",
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable {
+                                            flashlightOn = !flashlightOn
+                                        })
 
-                            VerticalDivider(
-                                modifier = Modifier,
-                                thickness = 1.dp,
-                                color = Color(0xFFD8D8D8)
-                            )
+                                VerticalDivider(
+                                    modifier = Modifier,
+                                    thickness = 1.dp,
+                                    color = Color(0xFFD8D8D8)
+                                )
 
-                            Image(
-                                painter = painterResource(Res.drawable.ic_gallery_icon),
-                                contentDescription = "gallery",
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable {
-                                        launchGallery = true
-                                    }
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_gallery_icon),
+                                    contentDescription = "gallery",
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable {
+                                            openImagePicker = true
+                                        }
+                                )
+                            }
+                        }
+                    } else {
+                        Button(
+                            modifier = Modifier.padding(top = 12.dp),
+                            onClick = {
+                                openImagePicker = true
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007AFF)),
+                        ) {
+                            Text(
+                                text = "Select Image",
+                                modifier = Modifier.background(Color.Transparent)
+                                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                                fontSize = 16.sp
                             )
                         }
                     }

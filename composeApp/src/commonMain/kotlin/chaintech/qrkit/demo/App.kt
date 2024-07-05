@@ -78,7 +78,7 @@ fun App() {
 }
 
 @Composable
-fun CompositionProvider(content: @Composable (SnackbarHostState) -> Unit) = AppTheme {
+fun CompositionProvider(content: @Composable (SnackbarHostState) -> Unit) {
     val snackBarHostState = remember { SnackbarHostState() }
 
     CompositionLocalProvider(

@@ -1,10 +1,10 @@
 [versions]
 
-kotlin = "1.9.23"
-compose = "1.6.1"
+kotlin = "2.0.0"
+compose = "1.6.11"
 agp = "8.2.2"
-androidx-activityCompose = "1.8.2"
-androidx-uiTest = "1.6.5"
+androidx-activityCompose = "1.9.0"
+androidx-uiTest = "1.6.8"
 voyagerVersion = "1.0.0"
 
 [libraries]
@@ -12,7 +12,7 @@ voyagerVersion = "1.0.0"
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
-qr-code = { module = "network.chaintech:qr-kit", version = "1.0.3" }
+qr-code = { module = "network.chaintech:qr-kit", version = "1.0.6" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerVersion" }
@@ -22,3 +22,4 @@ voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", vers
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

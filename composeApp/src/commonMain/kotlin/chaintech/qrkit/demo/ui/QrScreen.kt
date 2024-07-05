@@ -92,7 +92,6 @@ class QrScreen : Screen {
         }
     }
 
-    @OptIn(ExperimentalResourceApi::class)
     @Composable
     fun CategoryListItem(
         category: String,

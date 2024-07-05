@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -36,6 +37,14 @@ kotlin {
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+        }
+    }
+
+    jvm {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
         }
     }
 
@@ -72,6 +81,9 @@ kotlin {
         iosMain.dependencies {
         }
 
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+        }
     }
 }
 
