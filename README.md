@@ -60,7 +60,7 @@ QrScanner(
 
 * `modifier`: Modifier for modifying the layout of the QR scanner.
 * `flashlightOn`: Boolean indicating whether the flashlight is turned on.
-* `launchGallery`: Boolean indicating whether to launch the gallery for selecting images.
+* `openImagePicker`: Boolean indicating whether to launch the picker for selecting images.
 * `onCompletion`: Callback invoked when a QR code is successfully scanned.
 * `onGalleryCallBackHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
 * `onFailure`: Callback invoked when there's a failure during QR code scanning.
@@ -119,5 +119,7 @@ fun generateQrCode(
 * Compose Multiplatform
 * CameraX Jetpack library
 * ML Kit
+
+For Image Picker we had used this [CMP Pick n Crop Library](https://github.com/Chaintech-Network/CMP-image-pick-n-crop)
 
 - for more follow this class -> [App.kt](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/blob/main/composeApp/src/commonMain/kotlin/chaintech/qrkit/demo/App.kt)
