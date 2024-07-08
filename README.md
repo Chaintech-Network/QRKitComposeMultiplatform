@@ -1,7 +1,7 @@
 # QRKit - Compose Multiplatfrom
 QRKit is a Kotlin Multiplatform library for Qr-Scan in your Android or iOS App.
 
-![Hero-image - QR generator  amp;amp; scanner 2](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/b270c630-c4a4-49be-be53-d0b9693c0a80)
+<img width="960" alt="QRKit_Compose Multiplatfrom_banner" src="https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/6510ae51-6d79-4259-9654-61fb9d9e6cdb">
 
 ## Installation
 
@@ -67,7 +67,7 @@ QrScanner(
 
 ### QrCode Generator
 
-![image](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/470f6547-5121-4c19-ab51-74c14bf284ba)
+![QRKit_Compose Multiplatfrom_preview](https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/8422f149-8621-4dc0-a0ac-d65cb54a40d1)
 
 ### Example
 
@@ -123,3 +123,5 @@ fun generateQrCode(
 For Image Picker we had used this [CMP Pick n Crop Library](https://github.com/Chaintech-Network/CMP-image-pick-n-crop)
 
 - for more follow this class -> [App.kt](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/blob/main/composeApp/src/commonMain/kotlin/chaintech/qrkit/demo/App.kt)
+- Want to understand in more detail? Checkout this [Medium Article](https://medium.com/mobile-innovation-network/qrkit-qrcode-generator-in-compose-multiplatform-for-android-and-ios-858ec3e1e2b2)
+- Connect with us on [LinkedIn](https://www.linkedin.com/showcase/mobile-innovation-network)
