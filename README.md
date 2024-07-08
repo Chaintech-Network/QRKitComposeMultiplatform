@@ -1,5 +1,5 @@
 # QRKit - Compose Multiplatfrom
-QRKit is a Kotlin Multiplatform library for Qr-Scan in your Android or iOS App.
+QRKit is a Kotlin Multiplatform library for Qr-Scan in your Android, iOS And Desktop App.
 
 <img width="960" alt="QRKit_Compose Multiplatfrom_banner" src="https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/6510ae51-6d79-4259-9654-61fb9d9e6cdb">
 
@@ -20,11 +20,11 @@ commonMain.dependencies {
 ### Android
 https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/1e24f562-95aa-4452-9a19-30240bff13de
 
-
-
 ### iOS
 https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/60bfd192-3fbb-4509-940a-9ae44caaeeb2
 
+### Desktop
+https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/a3966bb4-a28e-4a03-a0aa-a740445a8f6a
 
 
 ### Add Permissions in Android and iOS
@@ -51,9 +51,9 @@ https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/6
 QrScanner(
     modifier: Modifier,
     flashlightOn: Boolean,
-    launchGallery: Boolean,
+    openImagePicker: Boolean,
     onCompletion: (String) -> Unit,
-    onGalleryCallBackHandler: (Boolean) -> Unit,
+    imagePickerHandler: (Boolean) -> Unit,
     onFailure: (String) -> Unit
 )
 ```
@@ -61,8 +61,7 @@ QrScanner(
 * `modifier`: Modifier for modifying the layout of the QR scanner.
 * `flashlightOn`: Boolean indicating whether the flashlight is turned on.
 * `openImagePicker`: Boolean indicating whether to launch the picker for selecting images.
-* `onCompletion`: Callback invoked when a QR code is successfully scanned.
-* `onGalleryCallBackHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
+* `imagePickerHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
 * `onFailure`: Callback invoked when there's a failure during QR code scanning.
 
 ### QrCode Generator
