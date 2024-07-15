@@ -1,6 +1,5 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-import com.android.build.api.dsl.ManagedVirtualDevice
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
@@ -13,9 +12,11 @@ plugins {
 kotlin {
     androidTarget {
         compilations.all {
-            kotlinOptions {
-                jvmTarget = "${JavaVersion.VERSION_1_8}"
-                freeCompilerArgs += "-Xjdk-release=${JavaVersion.VERSION_1_8}"
+            compileTaskProvider {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_17)
+                    freeCompilerArgs.add("-Xjdk-release=${JavaVersion.VERSION_17}")
+                }
             }
         }
         //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
@@ -56,12 +57,13 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(compose.runtime)
-            implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.qr.code)
+
+            implementation(libs.qr.kit)
+
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.screenmodel)
@@ -69,13 +71,12 @@ kotlin {
 
         commonTest.dependencies {
             implementation(kotlin("test"))
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
         }
 
         androidMain.dependencies {
-            implementation(compose.uiTooling)
+            implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activityCompose)
+            implementation(libs.compose.uitooling)
         }
 
         iosMain.dependencies {
@@ -88,42 +89,27 @@ kotlin {
 }
 
 android {
-    namespace = "chaintech.qrkit.demo"
+    namespace = "org.qrcodedemo.app"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
         targetSdk = 34
 
-        applicationId = "chaintech.qr.kit"
+        applicationId = "org.qrcodedemo.app.androidApp"
         versionCode = 1
         versionName = "1.0.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     sourceSets["main"].apply {
         manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        res.srcDirs("src/androidMain/res")
-    }
-    //https://developer.android.com/studio/test/gradle-managed-devices
-    @Suppress("UnstableApiUsage")
-    testOptions {
-        managedDevices.devices {
-            maybeCreate<ManagedVirtualDevice>("pixel5").apply {
-                device = "Pixel 5"
-                apiLevel = 34
-                systemImageSource = "aosp"
-            }
-        }
+        res.srcDirs("src/androidMain/resources")
+        resources.srcDirs("src/commonMain/resources")
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
     }
 }

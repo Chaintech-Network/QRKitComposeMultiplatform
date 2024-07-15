@@ -11,8 +11,8 @@
     <application
         android:name=".AndroidApp"
         android:icon="@android:drawable/ic_menu_compass"
-        android:label="QrKit"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+        android:label="QRCodeDemo"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity
             android:name=".AppActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

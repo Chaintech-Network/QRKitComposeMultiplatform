@@ -1,1 +1,0 @@
-package chaintech.qrkit.demo
