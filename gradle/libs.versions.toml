@@ -9,7 +9,7 @@ compose-uitooling = "1.6.8"
 voyagerVersion = "1.0.0"
 androidx-uiTest = "1.6.8"
 
-qrKit = "1.0.7"
+qrKit = "1.0.8"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
