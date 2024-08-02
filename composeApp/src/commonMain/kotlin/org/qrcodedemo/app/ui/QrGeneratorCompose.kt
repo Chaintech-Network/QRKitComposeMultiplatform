@@ -29,7 +29,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,23 +52,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.qrcodedemo.app.LocalSnackBarHostState
-import qrcodedemo.composeapp.generated.resources.img
 import qrgenerator.QRCodeImage
 import qrgenerator.generateQrCode
-import qrgenerator.qrpainter.QrBallShape
-import qrgenerator.qrpainter.QrBrush
-import qrgenerator.qrpainter.QrCodePainter
-import qrgenerator.qrpainter.QrFrameShape
-import qrgenerator.qrpainter.QrLogoPadding
-import qrgenerator.qrpainter.QrLogoShape
-import qrgenerator.qrpainter.QrPixelShape
-import qrgenerator.qrpainter.brush
-import qrgenerator.qrpainter.circle
-import qrgenerator.qrpainter.rememberQrCodePainter
-import qrgenerator.qrpainter.roundCorners
-import qrgenerator.qrpainter.solid
 
 @Composable
 fun QrGeneratorCompose(paddingValues: PaddingValues) {
@@ -89,30 +74,21 @@ fun QrGeneratorCompose(paddingValues: PaddingValues) {
             .padding(top = 22.dp)
             .verticalScroll(rememberScrollState())
     ) {
-//        QRCodeImage(
-//            url = "https://www.google.com/",
-//            contentScale = ContentScale.Fit,
-//            contentDescription = "QR Code",
-//            modifier = Modifier
-//                .size(150.dp),
-//            onSuccess = { qrImage ->
-//
-//            },
-//            onFailure = {
-//                scope.launch {
-//                    snackBarHostState.showSnackbar("Something went wrong")
-//                }
-//            }
-//        )
+        QRCodeImage(
+            url = "https://www.google.com/",
+            contentScale = ContentScale.Fit,
+            contentDescription = "QR Code",
+            modifier = Modifier
+                .size(150.dp),
+            onSuccess = { qrImage ->
 
-//        QrCode("https://www.google.com/") { painter ->
-//            Image(
-//                painter = painter,
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .size(150.dp)
-//            )
-//        }
+            },
+            onFailure = {
+                scope.launch {
+                    snackBarHostState.showSnackbar("Something went wrong")
+                }
+            }
+        )
 
         OutlinedTextField(
             value = inputText,
@@ -136,50 +112,38 @@ fun QrGeneratorCompose(paddingValues: PaddingValues) {
                 }
             }
         )
-
         Spacer(modifier = Modifier.height(22.dp))
-
-//        Button(
-//            onClick = {
-//                if (inputText.isBlank()) {
-//                    isInputTextError = true
-//                    return@Button
-//                } else {
-//                    focusManager.clearFocus()
-//                    generateQrCode(inputText, onSuccess = { info, qrCode ->
-//                        generatedQRCode.value = qrCode
-//                    }, onFailure = {
-//                        scope.launch {
-//                            snackBarHostState.showSnackbar("Something went wrong")
-//                        }
-//                    })
-//                }
-//            },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(54.dp),
-//            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007AFF)),
-//            shape = RoundedCornerShape(25)
-//        ) {
-//            Text(
-//                text = "Generate code",
-//                style = MaterialTheme.typography.bodyLarge,
-//                color = Color.White
-//            )
-//        }
-        if (inputText.isEmpty().not()) {
-            QrCode(inputText) { painter ->
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(250.dp)
-                )
-            }
+        Button(
+            onClick = {
+                if (inputText.isBlank()) {
+                    isInputTextError = true
+                    return@Button
+                } else {
+                    focusManager.clearFocus()
+                    generateQrCode(inputText, onSuccess = { info, qrCode ->
+                        generatedQRCode.value = qrCode
+                    }, onFailure = {
+                        scope.launch {
+                            snackBarHostState.showSnackbar("Something went wrong")
+                        }
+                    })
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007AFF)),
+            shape = RoundedCornerShape(25)
+        ) {
+            Text(
+                text = "Generate code",
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.White
+            )
         }
-//        generatedQRCode.value?.let { qrCode ->
-//            QRCodeViewer(qrCode)
-//        }
+        generatedQRCode.value?.let { qrCode ->
+            QRCodeViewer(qrCode)
+        }
     }
 }
 
@@ -264,37 +228,4 @@ fun QRCodeShimmer() {
             )
         }
     }
-}
-
-@Composable
-fun QrCode(data: String, content: @Composable() (QrCodePainter) -> Unit) {
-    val logo = painterResource(qrcodedemo.composeapp.generated.resources.Res.drawable.img)
-
-    val painter = rememberQrCodePainter(data) {
-        logo {
-            painter = logo
-            padding = QrLogoPadding.Natural(.1f)
-            shape = QrLogoShape.circle()
-            size = 0.2f
-        }
-
-        shapes() {
-            ball = QrBallShape.circle()
-            darkPixel = QrPixelShape.roundCorners()
-            frame = QrFrameShape.roundCorners(.25f)
-        }
-
-        colors {
-            dark = QrBrush.brush {
-                Brush.linearGradient(
-                    0f to Color.Red,
-                    1f to Color.Blue,
-                    end = Offset(it, it)
-                )
-            }
-            frame = QrBrush.solid(Color.Black)
-        }
-    }
-
-    content(painter)
 }
