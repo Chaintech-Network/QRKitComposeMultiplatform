@@ -1,6 +1,5 @@
 rootProject.name = "QRCodeDemo"
 include(":composeApp")
-include(":qrcodeScanner")
 
 pluginManagement {
     repositories {

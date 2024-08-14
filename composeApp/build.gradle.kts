@@ -64,9 +64,8 @@ kotlin {
 
             implementation(libs.qr.kit)
 
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.transitions)
-            implementation(libs.voyager.screenmodel)
+            implementation(libs.navigation.compose)
+            implementation(libs.sdp.ssp.compose.multiplatform)
         }
 
         commonTest.dependencies {

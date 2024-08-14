@@ -1,5 +1,5 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import org.qrcodedemo.app.App
+import org.qrcodedemo.app.AppHome
 import platform.UIKit.UIViewController
 
-fun MainViewController(): UIViewController = ComposeUIViewController { App() }
+fun MainViewController(): UIViewController = ComposeUIViewController { AppHome() }

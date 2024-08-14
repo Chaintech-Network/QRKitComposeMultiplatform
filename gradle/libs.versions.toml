@@ -3,24 +3,24 @@
 agp = "8.3.2"
 kotlin = "2.0.0"
 compose = "1.6.11"
-androidx-activityCompose = "1.9.0"
+androidx-activityCompose = "1.9.1"
 androidx-appcompat = "1.7.0"
 compose-uitooling = "1.6.8"
-voyagerVersion = "1.0.0"
+navigationCompose = "2.8.0-alpha02"
 androidx-uiTest = "1.6.8"
 
-qrKit = "1.0.7"
+qrKit = "2.0.0"
+sdpSspComposeMultiplatform = "1.0.4"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
-voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerVersion" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
 qr-kit = { module = "network.chaintech:qr-kit", version.ref = "qrKit" }
+sdp-ssp-compose-multiplatform = { module = "network.chaintech:sdp-ssp-compose-multiplatform", version.ref = "sdpSspComposeMultiplatform" }
 
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

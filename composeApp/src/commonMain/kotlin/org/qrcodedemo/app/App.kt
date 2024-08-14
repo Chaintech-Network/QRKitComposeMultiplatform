@@ -10,32 +10,10 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.SlideTransition
-import org.qrcodedemo.app.theme.AppTheme
-import org.qrcodedemo.app.ui.QrScreen
+import org.qrcodedemo.app.ui.QRKitNav
 
 val LocalSnackBarHostState =
     compositionLocalOf<SnackbarHostState> { error("No SnackBarHostState provided") }
-
-@Composable
-fun App() {
-    CompositionProvider { snackBarHostState ->
-        Scaffold(
-            snackbarHost = {
-                SnackbarHost(snackBarHostState, Modifier.padding(bottom = 30.dp))
-            }
-        ) {
-            Navigator(
-                screen = QrScreen()
-            ) { navigator ->
-                Scaffold {
-                    SlideTransition(navigator)
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun CompositionProvider(content: @Composable (SnackbarHostState) -> Unit) {
@@ -45,5 +23,18 @@ fun CompositionProvider(content: @Composable (SnackbarHostState) -> Unit) {
         LocalSnackBarHostState provides snackBarHostState,
     ) {
         content(snackBarHostState)
+    }
+}
+
+@Composable
+internal fun AppHome() {
+    CompositionProvider { snackBarHostState ->
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(snackBarHostState, Modifier.padding(bottom = 30.dp))
+            }
+        ) {
+            QRKitNav()
+        }
     }
 }

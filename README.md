@@ -1,7 +1,7 @@
 # QRKit - Compose Multiplatfrom
-QRKit is a Kotlin Multiplatform library for Qr-Scan in your Android, iOS And Desktop App.
+QRKit is a Compose Multiplatform library designed for seamless QR code scanning & QR code Generating across Android, iOS, and Desktop applications.
 
-<img width="960" alt="QRKit_Compose Multiplatfrom_banner" src="https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/6510ae51-6d79-4259-9654-61fb9d9e6cdb">
+<img width="960" alt="QR-code-generator-scanner" src="https://github.com/user-attachments/assets/34bdbfde-7ed1-4d6d-924b-b3af4f6b01c5">
 
 ## Installation
 
@@ -9,23 +9,13 @@ Add the dependency to your `build.gradle.kts` file:
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:1.0.7")
+    implementation("network.chaintech:qr-kit:2.0.0")
 }
 ```
 
-## Usage
+## QrScanner
 
-### QrScanner
-
-### Android
-https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/1e24f562-95aa-4452-9a19-30240bff13de
-
-### iOS
-https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/assets/143475887/60bfd192-3fbb-4509-940a-9ae44caaeeb2
-
-### Desktop
-https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/a3966bb4-a28e-4a03-a0aa-a740445a8f6a
-
+![QRCodeScannerCMP](https://github.com/user-attachments/assets/6d29f565-4678-445f-9609-e7a299a8945c)
 
 ### Add Permissions in Android and iOS
 
@@ -45,7 +35,7 @@ https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/
 <key>NSPhotoLibraryUsageDescription</key><string>$(PRODUCT_NAME)photos description.</string>
 ```
 
-### Example
+### Usage
 
 ```kotlin
 QrScanner(
@@ -64,63 +54,163 @@ QrScanner(
 * `imagePickerHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
 * `onFailure`: Callback invoked when there's a failure during QR code scanning.
 
-### QrCode Generator
+For Example follow [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
 
-![QRKit_Compose Multiplatfrom_preview](https://github.com/Chaintech-Network/QRKitComposeMultiplatform/assets/143475887/8422f149-8621-4dc0-a0ac-d65cb54a40d1)
-
-### Example
-
-```kotlin
-QRCodeImage(
-    url: String,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    alpha: Float = DefaultAlpha,
-    colorFilter: ColorFilter? = null,
-    filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
-    onSuccess: (ImageBitmap) -> Unit = { qrImage -> },
-    onFailure: (String) -> Unit = { message -> }
-)
-```
-
-- And also use below function to generate qrcode
-
-```kotlin
-fun generateQrCode(
-    url: String,
-    onSuccess: (String, ImageBitmap) -> Unit,
-    onFailure: (String) -> Unit
-) {
-    try {
-        val imageBitmap = generateCode(url)
-        onSuccess(url, imageBitmap)
-    } catch (e: Exception) {
-        onFailure("${e.message}")
-    }
-}
-```
-
-* `url`: The URL of the QR code image to be displayed.
-* `contentDescription`: A textual description of the image content for accessibility purposes. It's optional.
-* `modifier`: Modifier for modifying the layout of the QR code image.
-* `alignment`: Alignment of the QR code image within its layout bounds. Default is Alignment.Center.
-* `contentScale`: The scale strategy for fitting the QR code image content within its layout bounds. Default is ContentScale.Fit.
-* `alpha`: The opacity of the QR code image, ranging from 0.0 (fully transparent) to 1.0 (fully opaque). Default is DefaultAlpha.
-* `colorFilter`: A color filter to apply to the QR code image. Default is null.
-* `filterQuality`: The quality of the filtering applied to the QR code image. Default is DrawScope.DefaultFilterQuality.
-* `onSuccess`: Callback invoked when the QR code image is successfully loaded and decoded, passing the decoded ImageBitmap as a parameter.
-* `onFailure`: Callback invoked when there's a failure during loading or decoding the QR code image, passing an error message as a parameter.
-
-
-## Tech Stack(s)
+### Tech Stack(s) for scanner
 * Compose Multiplatform
 * CameraX Jetpack library
 * ML Kit
+  
+---
+
+## QrCode Generator
+
+<img width="960" alt="QRCodeGenerator" src="https://github.com/user-attachments/assets/9569c123-8dfb-4897-9b50-5bbdd91ed3fb">
+
+<img width="960" alt="QRCodeCustomization" src="https://github.com/user-attachments/assets/eb47dc54-644c-496e-a78d-f52c1a23df43">
+
+### Basic QR Code Generation
+Generating a basic QR code is as simple as using the rememberQrKitPainter function:
+
+```kotlin
+val painter = rememberQrKitPainter(data = inputText)
+
+Image(
+    painter = painter, 
+    contentDescription = null, 
+    modifier = Modifier.size(100.dp)
+)
+```
+
+### Designed QR Code Generation
+To create a more customized QR code, you can use rememberQrKitPainter function with additional options:
+
+```kotlin
+val centerLogo = painterResource(Res.drawable.ic_youtube)
+
+val painter = rememberQrKitPainter(
+    data = inputText,
+    options = {
+        centerLogo { painter = centerLogo }
+
+        qrColors {
+            darkColorBrush = QrKitBrush.customBrush {
+                Brush.linearGradient(
+                    0f to Color.White,
+                    1f to Color.White,
+                    end = Offset(it, it)
+                )
+            }
+            frameColorBrush = QrKitBrush.solidBrush(Color.Blue)
+        }
+
+        qrShapes {
+            ballShape = getSelectedQrBall(QrBallType.SquareQrBall())
+            darkPixelShape = getSelectedPixel(PixelType.SquarePixel())
+            frameShape = getSelectedQrFrame(QrFrameType.SquareQrFrame())
+            qrCodePattern = getSelectedPattern(PatternType.SquarePattern)
+        }
+    }
+)
+```
+
+### Explanation
+
+#### 1. Creating a QR Code Painter
+To create a QR code painter, use the rememberQrKitPainter function and pass in the input text:
+
+```
+val painter = rememberQrKitPainter(inputText)
+```
+This will create a QR code painter with the specified input text.
+
+#### 2. Setting the Center Logo
+To set the center logo of the QR code, use the centerLogo function:
+
+```
+centerLogo { painter = centerLogo }
+```
+This will set the center logo of the QR code to the specified logo.
+
+#### 3. Configuring Colors
+To configure the colors used in the QR code, use the qrColors function:
+
+```
+qrColors {
+    // configure colors here
+}
+```
+
+Within the qrColors block, you can configure the following:
+
+- darkColorBrush: Sets a custom dark color brush with a linear gradient.
+```
+darkColorBrush = QrKitBrush.customBrush {
+    Brush.linearGradient(
+        0f to Color.White,
+        1f to Color.White,
+        end = Offset(it, it)
+    )
+}
+```
+
+#### 4. Configuring Shapes
+To configure the shapes used in the QR code, use the qrShapes function:
+
+```
+qrShapes {
+    // configure shapes here
+}
+```
+
+Within the qrShapes block, you can configure the following:
+
+- ballShape: Sets the ball shape to a square QR ball.
+```
+ballShape = getSelectedQrBall(QrBallType.SquareQrBall())
+```
+
+- darkPixelShape: Sets the dark pixel shape to a square pixel.
+```
+darkPixelShape = getSelectedPixel(PixelType.SquarePixel())
+```
+
+- frameShape: Sets the frame shape to a square QR frame.
+```
+frameShape = getSelectedQrFrame(QrFrameType.SquareQrFrame())
+```
+
+- qrCodePattern: Sets the QR code pattern to a square pattern.
+```
+qrCodePattern = getSelectedPattern(PatternType.SquarePattern)
+```
+
+### Data Types for QR Codes
+Supports a variety of data types for your QR codes:
+
+```
+val email: String = email("developer@gmail.com", "addeveloper@gmail.com", "Lorem ipsum", "Lorem ipsum")
+
+val painter = rememberQrKitPainter(data = email)
+
+Image(
+    painter = painter, contentDescription = null, modifier = Modifier.size(100.dp)
+)
+```
+
+1. text: Simple text data type.
+2. phone: Telephone number data type.
+3. email: Email address data type.
+4. sms: Short message service data.
+5. wifi: Wireless network configuration data.
+6. event: Calendar event data type.
+7. location: Geographic location data type.
+
+For Example follow [QrGeneratorScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrGeneratorScreen.kt)
+
 
 For Image Picker we had used this [CMP Pick n Crop Library](https://github.com/Chaintech-Network/CMP-image-pick-n-crop)
 
-- for more follow this class -> [App.kt](https://github.com/ChainTechNetwork/QRKitComposeMultiplatform/blob/main/composeApp/src/commonMain/kotlin/chaintech/qrkit/demo/App.kt)
-- Want to understand in more detail? Checkout this [Medium Article](https://medium.com/mobile-innovation-network/qrkit-qrcode-generator-in-compose-multiplatform-for-android-and-ios-858ec3e1e2b2)
+- for more follow this class -> [App.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform/blob/main/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/App.kt)
+- Want to understand in more detail? Checkout this [Medium Article QRCodeGenerator](https://medium.com/mobile-innovation-network/qrkit-2-0-scan-genrate-customize-716d870c3eae), [Medium Article QRCodeScanner](https://medium.com/mobile-innovation-network/qrkit-barcode-scanning-in-compose-multiplatform-for-android-and-ios-77cf5d84f719)
 - Connect with us on [LinkedIn](https://www.linkedin.com/showcase/mobile-innovation-network)
