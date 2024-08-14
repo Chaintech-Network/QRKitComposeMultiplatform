@@ -1,7 +1,7 @@
 # QRKit - Compose Multiplatfrom
 QRKit is a Compose Multiplatform library designed for seamless QR code scanning & QR code Generating across Android, iOS, and Desktop applications.
 
-<img width="960" alt="QR-code-generator-scanner" src="https://github.com/user-attachments/assets/34bdbfde-7ed1-4d6d-924b-b3af4f6b01c5">
+<img width="960" alt="QR-code-generator-scanner" src="/assets/CMP_QRKit_scanner_genrator_banner.png">
 
 ## Installation
 
@@ -15,7 +15,7 @@ commonMain.dependencies {
 
 ## QrScanner
 
-![QRCodeScannerCMP](https://github.com/user-attachments/assets/6d29f565-4678-445f-9609-e7a299a8945c)
+<img width="960" alt="QR-code-generator-scanner" src="/assets/CMP_QRKit_scanner.gif">
 
 ### Add Permissions in Android and iOS
 
@@ -65,9 +65,9 @@ For Example follow [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRK
 
 ## QrCode Generator
 
-<img width="960" alt="QRCodeGenerator" src="https://github.com/user-attachments/assets/9569c123-8dfb-4897-9b50-5bbdd91ed3fb">
+<img width="960" alt="QRCodeGenerator" src="/assets/CMP_QRKit_genrator_1.png">
 
-<img width="960" alt="QRCodeCustomization" src="https://github.com/user-attachments/assets/eb47dc54-644c-496e-a78d-f52c1a23df43">
+<img width="960" alt="QRCodeCustomization" src="/assets/CMP_QRKit_genrator_2.png">
 
 ### Basic QR Code Generation
 Generating a basic QR code is as simple as using the rememberQrKitPainter function:
