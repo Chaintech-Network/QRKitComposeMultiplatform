@@ -72,8 +72,8 @@ QrScanner(
 
 ### 🖼️ QR Code Generator
 
-<img width="960" alt="QRCodeGenerator" src="/assets/CMP_QRKit_genrator_1.png">
-<img width="960" alt="QRCodeCustomization" src="/assets/CMP_QRKit_genrator_2.png">
+<img width="960" alt="QRCodeGenerator" src="/assets/CMP_QRKit_QR_Generator.png">
+<img width="960" alt="QRCodeCustomization" src="/assets/CMP_QRKit_QR_Customisation.png">
 
 - ### Basic QR Code Generation
   Generating a basic QR code is as simple as using the rememberQrKitPainter function:
@@ -165,7 +165,7 @@ QrScanner(
       Within the `qrShapes` block, you can configure the following properties:
 
       | Property            | Description                                 | Example Code                                                      |
-              |---------------------|---------------------------------------------|-------------------------------------------------------------------|
+      |---------------------|---------------------------------------------|-------------------------------------------------------------------|
       | **ballShape**       | Sets the ball shape to a square QR ball.   | `ballShape = getSelectedQrBall(QrBallType.SquareQrBall())`      |
       | **darkPixelShape**  | Sets the dark pixel shape to a square pixel.| `darkPixelShape = getSelectedPixel(PixelType.SquarePixel())`     |
       | **frameShape**      | Sets the frame shape to a square QR frame. | `frameShape = getSelectedQrFrame(QrFrameType.SquareQrFrame())`   |
