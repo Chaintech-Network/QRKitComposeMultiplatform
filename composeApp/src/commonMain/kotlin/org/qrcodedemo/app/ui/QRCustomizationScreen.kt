@@ -40,18 +40,20 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import network.chaintech.sdpcomposemultiplatform.sdp
 import network.chaintech.sdpcomposemultiplatform.ssp
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import qrcodedemo.composeapp.generated.resources.Res
 import qrcodedemo.composeapp.generated.resources.ic_check_icon
+import qrcodedemo.composeapp.generated.resources.ic_circle
 import qrcodedemo.composeapp.generated.resources.ic_circle_eyes
 import qrcodedemo.composeapp.generated.resources.ic_circle_pixel
 import qrcodedemo.composeapp.generated.resources.ic_circle_round_eyes
-import qrcodedemo.composeapp.generated.resources.ic_circle_shape
 import qrcodedemo.composeapp.generated.resources.ic_hexagon
 import qrcodedemo.composeapp.generated.resources.ic_horizontal_line_pixel
 import qrcodedemo.composeapp.generated.resources.ic_instagram
@@ -69,28 +71,42 @@ import qrcodedemo.composeapp.generated.resources.ic_square_round_eyes
 import qrcodedemo.composeapp.generated.resources.ic_tiktok
 import qrcodedemo.composeapp.generated.resources.ic_vertical_line_pixel
 import qrcodedemo.composeapp.generated.resources.ic_youtube
+import qrcodedemo.composeapp.generated.resources.sf_pro
+import qrcodedemo.composeapp.generated.resources.sf_pro_bold
+import qrcodedemo.composeapp.generated.resources.sf_pro_medium
+import qrcodedemo.composeapp.generated.resources.sf_pro_semibold
 import qrgenerator.qrkitpainter.PatternType
-import qrgenerator.qrkitpainter.PixelType
 import qrgenerator.qrkitpainter.QrBallType
 import qrgenerator.qrkitpainter.QrFrameType
 import qrgenerator.qrkitpainter.QrKitBrush
+import qrgenerator.qrkitpainter.QrKitColors
+import qrgenerator.qrkitpainter.QrKitLogo
+import qrgenerator.qrkitpainter.QrKitShapes
+import qrgenerator.qrkitpainter.QrPixelType
 import qrgenerator.qrkitpainter.customBrush
+import qrgenerator.qrkitpainter.getSelectedFrameShape
 import qrgenerator.qrkitpainter.getSelectedPattern
 import qrgenerator.qrkitpainter.getSelectedPixel
 import qrgenerator.qrkitpainter.getSelectedQrBall
-import qrgenerator.qrkitpainter.getSelectedQrFrame
 import qrgenerator.qrkitpainter.rememberQrKitPainter
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
+    val FontSfPro = FontFamily(
+        Font(Res.font.sf_pro, FontWeight.Normal),
+        Font(Res.font.sf_pro_medium, FontWeight.Medium),
+        Font(Res.font.sf_pro_semibold, FontWeight.SemiBold),
+        Font(Res.font.sf_pro_bold, FontWeight.Bold)
+    )
+
     val pixelList = remember { getPixelList() }
     val eyesList = remember { eyesList() }
     val colorsList = remember { colorsList() }
     val logosList = remember { logosList() }
     val shapesList = remember { shapesList() }
 
-    var selectedPixelType by remember { mutableStateOf<PixelType?>(null) }
+    var selectedQrPixelType by remember { mutableStateOf<QrPixelType?>(null) }
     var selectedQRFrameType by remember { mutableStateOf<QrFrameType?>(null) }
     var selectedQRBallType by remember { mutableStateOf<QrBallType?>(null) }
     var selectedColorIndex by remember { mutableStateOf(-1) }
@@ -106,29 +122,31 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
     )
 
     val painter = rememberQrKitPainter(inputText) {
-        if (selectedLogoIndex != -1)
-            centerLogo { painter = centerLogo }
-
-        qrShapes {
-            ballShape = getSelectedQrBall(selectedQRBallType ?: QrBallType.SquareQrBall())
-            darkPixelShape = getSelectedPixel(selectedPixelType ?: PixelType.SquarePixel())
-            frameShape = getSelectedQrFrame(selectedQRFrameType ?: QrFrameType.SquareQrFrame())
-            qrCodePattern = getSelectedPattern(selectedShapeType ?: PatternType.SquarePattern)
-        }
-
-        qrColors {
-            darkColorBrush = QrKitBrush.customBrush {
+        shapes = QrKitShapes(
+            ballShape = getSelectedQrBall(selectedQRBallType ?: QrBallType.SquareQrBall()),
+            darkPixelShape = getSelectedPixel(selectedQrPixelType ?: QrPixelType.SquarePixel()),
+            frameShape = getSelectedFrameShape(selectedQRFrameType ?: QrFrameType.SquareFrame()),
+            codeShape = getSelectedPattern(selectedShapeType ?: PatternType.SquarePattern),
+        )
+        colors = QrKitColors(
+            darkBrush = QrKitBrush.customBrush {
                 Brush.linearGradient(
                     0f to color[0],
                     1f to color[1],
                     end = Offset(it, it)
                 )
             }
-        }
+        )
+        logo = if (selectedLogoIndex != -1) QrKitLogo(centerLogo) else QrKitLogo()
     }
 
 
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFF1D1C22))) {
+    Column(
+        modifier = Modifier
+            .background(Color(0xFF1D1C22))
+            .statusBarsPadding()
+            .fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,9 +165,11 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                     text = "QR Code Customization:",
                     modifier = Modifier.weight(1f),
                     fontSize = 14.ssp,
-                    color = Color(0xFFC17D10),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Serif
+                    style = TextStyle(
+                        color = Color(0xFFC17D10),
+                        fontFamily = FontSfPro,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
 
                 Icon(
@@ -183,9 +203,11 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 text = "Choose Pattern",
                 modifier = Modifier.padding(top = 16.sdp, start = 14.sdp, end = 14.sdp),
                 fontSize = 12.ssp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
+                style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontSfPro,
+                    fontWeight = FontWeight.SemiBold
+                )
             )
 
             LazyRow(
@@ -198,14 +220,14 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 items(pixelList.size) { i ->
                     Box(modifier = Modifier) {
                         Box(
-                            modifier = if (pixelList[i].second == selectedPixelType) {
+                            modifier = if (pixelList[i].second == selectedQrPixelType) {
                                 Modifier
                                     .padding(top = 4.sdp, end = 4.sdp)
                                     .background(Color(0xFF181818), RoundedCornerShape(5.sdp))
                                     .border(1.sdp, Color(0xFF007AFF), RoundedCornerShape(5.sdp))
                                     .clip(RoundedCornerShape(5.sdp))
                                     .clickable {
-                                        selectedPixelType = pixelList[i].second
+                                        selectedQrPixelType = pixelList[i].second
                                     }
                                     .size(50.sdp)
                             } else {
@@ -214,7 +236,7 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                                     .background(Color(0xFF181818), RoundedCornerShape(5.sdp))
                                     .clip(RoundedCornerShape(5.sdp))
                                     .clickable {
-                                        selectedPixelType = pixelList[i].second
+                                        selectedQrPixelType = pixelList[i].second
                                     }
                                     .size(50.sdp)
                             }
@@ -226,7 +248,7 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                                 colorFilter = ColorFilter.tint(color = Color.White)
                             )
                         }
-                        if (pixelList[i].second == selectedPixelType)
+                        if (pixelList[i].second == selectedQrPixelType)
                             Image(
                                 painter = painterResource(Res.drawable.ic_check_icon),
                                 contentDescription = null,
@@ -247,9 +269,11 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 text = "Choose Eyes",
                 modifier = Modifier.padding(top = 16.sdp, start = 14.sdp, end = 14.sdp),
                 fontSize = 12.ssp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
+                style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontSfPro,
+                    fontWeight = FontWeight.SemiBold
+                )
             )
 
             LazyRow(
@@ -316,9 +340,11 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 text = "Choose Color",
                 modifier = Modifier.padding(top = 16.sdp, start = 14.sdp, end = 14.sdp),
                 fontSize = 12.ssp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
+                style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontSfPro,
+                    fontWeight = FontWeight.SemiBold
+                )
             )
 
             FlowRow(
@@ -373,9 +399,11 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 text = "Choose Center Logo",
                 modifier = Modifier.padding(top = 16.sdp, start = 14.sdp, end = 14.sdp),
                 fontSize = 12.ssp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
+                style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontSfPro,
+                    fontWeight = FontWeight.SemiBold
+                )
             )
 
             FlowRow(
@@ -426,9 +454,11 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 text = "Choose Shape",
                 modifier = Modifier.padding(top = 16.sdp, start = 14.sdp, end = 14.sdp),
                 fontSize = 12.ssp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif
+                style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontSfPro,
+                    fontWeight = FontWeight.SemiBold
+                )
             )
 
             LazyRow(
@@ -491,13 +521,13 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
     }
 }
 
-fun getPixelList(): List<Pair<DrawableResource, PixelType>> {
+fun getPixelList(): List<Pair<DrawableResource, QrPixelType>> {
     return listOf(
-        Pair(Res.drawable.ic_vertical_line_pixel, PixelType.VerticalLinePixel()),
-        Pair(Res.drawable.ic_horizontal_line_pixel, PixelType.HorizontalLinePixel()),
-        Pair(Res.drawable.ic_round_corner_pixel, PixelType.RoundCornerPixel()),
-        Pair(Res.drawable.ic_circle_pixel, PixelType.CirclePixel()),
-        Pair(Res.drawable.ic_square_pixel, PixelType.SquarePixel()),
+        Pair(Res.drawable.ic_vertical_line_pixel, QrPixelType.VerticalLinePixel()),
+        Pair(Res.drawable.ic_horizontal_line_pixel, QrPixelType.HorizontalLinePixel()),
+        Pair(Res.drawable.ic_round_corner_pixel, QrPixelType.RoundCornerPixel()),
+        Pair(Res.drawable.ic_circle_pixel, QrPixelType.CirclePixel()),
+        Pair(Res.drawable.ic_square_pixel, QrPixelType.SquarePixel()),
     )
 }
 
@@ -505,33 +535,33 @@ fun eyesList(): List<Triple<DrawableResource, QrFrameType, QrBallType>> {
     return listOf(
         Triple(
             Res.drawable.ic_square_round_eyes,
-            QrFrameType.SquareQrFrame(),
+            QrFrameType.SquareFrame(),
             QrBallType.RoundCornersQrBall(0.25f)
         ),
         Triple(
             Res.drawable.ic_square_circle_eyes,
-            QrFrameType.SquareQrFrame(),
+            QrFrameType.SquareFrame(),
             QrBallType.CircleQrBall()
         ),
         Triple(
             Res.drawable.ic_circle_round_eyes,
-            QrFrameType.CircleQrFrame(),
+            QrFrameType.CircleFrame(),
             QrBallType.RoundCornersQrBall(0.25f)
         ),
-        Triple(Res.drawable.ic_circle_eyes, QrFrameType.CircleQrFrame(), QrBallType.CircleQrBall()),
+        Triple(Res.drawable.ic_circle_eyes, QrFrameType.CircleFrame(), QrBallType.CircleQrBall()),
         Triple(
             Res.drawable.ic_rounded_square_eyes,
-            QrFrameType.RoundCornersQrFrame(0.25f),
+            QrFrameType.RoundCornersFrame(0.25f),
             QrBallType.SquareQrBall()
         ),
         Triple(
             Res.drawable.ic_rounded_eyes,
-            QrFrameType.RoundCornersQrFrame(0.25f),
+            QrFrameType.RoundCornersFrame(0.25f),
             QrBallType.RoundCornersQrBall(0.25f)
         ),
         Triple(
             Res.drawable.ic_rounded_circle_eyes,
-            QrFrameType.RoundCornersQrFrame(0.25f),
+            QrFrameType.RoundCornersFrame(0.25f),
             QrBallType.CircleQrBall()
         ),
     )
@@ -564,7 +594,7 @@ fun logosList(): List<Pair<DrawableResource, String>> {
 
 fun shapesList(): List<Pair<DrawableResource, PatternType>> {
     return listOf(
-        Pair(Res.drawable.ic_circle_shape, PatternType.CirclePattern()),
+        Pair(Res.drawable.ic_circle, PatternType.CirclePattern()),
         Pair(Res.drawable.ic_hexagon, PatternType.HexagonPattern()),
         Pair(Res.drawable.ic_pentagon, PatternType.PentagonPattern()),
         Pair(Res.drawable.ic_square, PatternType.SquarePattern),

@@ -1,21 +1,42 @@
 [versions]
 
+accompanistPermissions = "0.34.0"
 agp = "8.3.2"
-kotlin = "2.0.0"
-compose = "1.6.11"
-androidx-activityCompose = "1.9.1"
+barcodeScanning = "17.3.0"
+cameraCore = "1.3.4"
+cmpImagePickNCrop = "1.0.3"
+core = "3.5.2"
+coreKtx = "1.13.1"
+imageLoader = "1.6.4"
+javase = "3.4.1"
+jna = "5.14.0"
+kotlin = "2.0.20"
+compose = "1.7.0-rc01"
+androidx-activityCompose = "1.9.2"
 androidx-appcompat = "1.7.0"
-compose-uitooling = "1.6.8"
+compose-uitooling = "1.7.2"
 navigationCompose = "2.8.0-alpha02"
-androidx-uiTest = "1.6.8"
+androidx-uiTest = "1.7.2"
 
-qrKit = "2.0.0"
+qrKit = "3.0.0"
 sdpSspComposeMultiplatform = "1.0.4"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCore" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCore" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+cmp-image-pick-n-crop = { module = "network.chaintech:cmp-image-pick-n-crop", version.ref = "cmpImagePickNCrop" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
+core = { module = "com.google.zxing:core", version.ref = "core" }
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "imageLoader" }
+javase = { module = "com.google.zxing:javase", version.ref = "javase" }
+jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }

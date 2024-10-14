@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -27,22 +29,30 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.EmptyPath
+import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import kotlinx.coroutines.launch
 import network.chaintech.sdpcomposemultiplatform.sdp
 import network.chaintech.sdpcomposemultiplatform.ssp
 import org.jetbrains.compose.resources.Font
@@ -51,29 +61,21 @@ import qrcodedemo.composeapp.generated.resources.Aeonik_Bold
 import qrcodedemo.composeapp.generated.resources.Aeonik_Regular
 import qrcodedemo.composeapp.generated.resources.Res
 import qrcodedemo.composeapp.generated.resources.bg
-import qrcodedemo.composeapp.generated.resources.ic_calendar
 import qrcodedemo.composeapp.generated.resources.ic_done
 import qrcodedemo.composeapp.generated.resources.ic_drop_down
-import qrcodedemo.composeapp.generated.resources.ic_email
-import qrcodedemo.composeapp.generated.resources.ic_magic_tool
-import qrcodedemo.composeapp.generated.resources.ic_phone
-import qrcodedemo.composeapp.generated.resources.ic_sms
-import qrcodedemo.composeapp.generated.resources.ic_text
-import qrcodedemo.composeapp.generated.resources.ic_text_blue
-import qrcodedemo.composeapp.generated.resources.ic_website
-import qrcodedemo.composeapp.generated.resources.ic_wifi
+import qrcodedemo.composeapp.generated.resources.img_qr_thumb
 import qrcodedemo.composeapp.generated.resources.poppins_bold
 import qrcodedemo.composeapp.generated.resources.poppins_medium
 import qrcodedemo.composeapp.generated.resources.poppins_regular
 import qrcodedemo.composeapp.generated.resources.poppins_semibold
-import qrgenerator.qrkitpainter.QrKitBrush
-import qrgenerator.qrkitpainter.QrKitColors
-import qrgenerator.qrkitpainter.customBrush
-import qrgenerator.qrkitpainter.rememberQrKitPainter
+import qrgenerator.barcodepainter.BarcodeFormat
+import qrgenerator.barcodepainter.EmptyPainter
+import qrgenerator.barcodepainter.rememberBarcodePainter
 
 @Composable
-fun QrGeneratorView(onNavigate: (String) -> Unit) {
-    var selectedType by remember { mutableStateOf("Text") }
+fun BarCodeGeneratorScreen(onNavigate: (String) -> Unit) {
+    var selectedTypeTitle by remember { mutableStateOf("ITF") }
+    var selectedTypeFormat by remember { mutableStateOf(BarcodeFormat.ITF) }
     var selectedIndex by remember { mutableStateOf(0) }
     var showSheet by remember { mutableStateOf(false) }
 
@@ -89,186 +91,179 @@ fun QrGeneratorView(onNavigate: (String) -> Unit) {
         Font(Res.font.poppins_bold, FontWeight.Bold)
     )
 
-    Box(
-        modifier = Modifier
-            .background(Color(0xFF1D1C22))
-            .statusBarsPadding()
-            .fillMaxSize()
-    ) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(resource = Res.drawable.bg),
-            contentScale = ContentScale.Fit,
-            contentDescription = ""
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 120.sdp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.sdp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "QR Code",
-                        modifier = Modifier
-                            .padding(horizontal = 14.sdp)
-                            .padding(top = 20.sdp),
-                        style = TextStyle(
-                            color = Color(0xFFFD66B5),
-                            fontFamily = FontAeonik,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        fontSize = 14.ssp
-                    )
+    var inputText by remember { mutableStateOf("512345678901") }
 
-                    Text(
-                        text = "Generator",
-                        modifier = Modifier
-                            .padding(horizontal = 14.sdp)
-                            .padding(top = 2.sdp),
-                        fontSize = 26.ssp,
-                        style = TextStyle(
-                            color = Color(0xFFFF8066),
-                            fontFamily = FontAeonik,
-                            fontWeight = FontWeight.Bold
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .background(Color(0xFF1D1C22))
+                .statusBarsPadding()
+                .fillMaxSize()
+        ) {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(resource = Res.drawable.bg),
+                contentScale = ContentScale.Fit,
+                contentDescription = ""
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 120.sdp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 16.sdp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Bar Code",
+                            modifier = Modifier
+                                .padding(horizontal = 14.sdp)
+                                .padding(top = 20.sdp),
+                            style = TextStyle(
+                                color = Color(0xFF4D8EFF),
+                                fontFamily = FontAeonik,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            fontSize = 14.ssp
                         )
+
+                        Text(
+                            text = "Generator",
+                            modifier = Modifier
+                                .padding(horizontal = 14.sdp)
+                                .padding(top = 2.sdp),
+                            fontSize = 26.ssp,
+                            style = TextStyle(
+                                color = Color(0xFF00FFA7),
+                                fontFamily = FontAeonik,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+
+                    Icon(
+                        Icons.Filled.Close,
+                        "close",
+                        modifier = Modifier
+                            .size(28.sdp)
+                            .clickable {
+                                onNavigate(AppConstants.BACK_CLICK_ROUTE)
+                            },
+                        tint = Color.White
                     )
                 }
 
-                Icon(
-                    Icons.Filled.Close,
-                    "close",
+                Text(
+                    text = "Choose Bar Code Type",
                     modifier = Modifier
-                        .size(28.sdp)
+                        .padding(horizontal = 14.sdp)
+                        .padding(top = 22.sdp),
+                    fontSize = 10.ssp,
+                    style = TextStyle(
+                        color = Color(0xFFAFAFAF),
+                        fontFamily = FontPoppins,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+
+                OutlinedTextField(value = selectedTypeTitle,
+                    modifier = Modifier
+                        .padding(horizontal = 14.sdp)
+                        .padding(top = 10.sdp)
+                        .fillMaxWidth()
                         .clickable {
-                            onNavigate(AppConstants.BACK_CLICK_ROUTE)
+                            showSheet = true
                         },
-                    tint = Color.White
-                )
-            }
-
-            Text(
-                text = "Choose QR Code type",
-                modifier = Modifier
-                    .padding(horizontal = 14.sdp)
-                    .padding(top = 22.sdp),
-                fontSize = 10.ssp,
-                style = TextStyle(
-                    color = Color(0xFFAFAFAF),
-                    fontFamily = FontPoppins,
-                    fontWeight = FontWeight.Medium
-                )
-            )
-
-            OutlinedTextField(value = selectedType,
-                modifier = Modifier
-                    .padding(horizontal = 14.sdp)
-                    .padding(top = 10.sdp)
-                    .fillMaxWidth()
-                    .clickable {
-                        showSheet = true
+                    onValueChange = {
+                        selectedTypeTitle = it
                     },
-                onValueChange = {
-                    selectedType = it
-                },
-                enabled = false,
-                singleLine = true,
-                placeholder = {
-                    Text(
-                        text = "Text",
-                        modifier = Modifier,
-                        fontSize = 12.ssp,
-                        style = TextStyle(
-                            color = Color(0xFF747474),
-                            fontFamily = FontPoppins,
-                            fontWeight = FontWeight.Medium
+                    enabled = false,
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Text",
+                            modifier = Modifier,
+                            fontSize = 12.ssp,
+                            style = TextStyle(
+                                color = Color(0xFF747474),
+                                fontFamily = FontPoppins,
+                                fontWeight = FontWeight.Medium
+                            )
                         )
-                    )
-                },
-                textStyle = TextStyle(
-                    fontSize = 12.ssp, color = Color.White, fontFamily = FontPoppins, fontWeight = FontWeight.Medium
-                ),
-                shape = RoundedCornerShape(6.sdp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color(0xFF3E3D46),
-                    focusedBorderColor = Color(0xFF3E3D46),
-                    cursorColor = Color.White,
-                    disabledBorderColor = Color(0xFF3E3D46),
-                ),
-                leadingIcon = {
-                    Image(
-                        modifier = Modifier.padding(start = 10.sdp, end = 10.sdp).size(18.sdp),
-                        painter = painterResource(resource = Res.drawable.ic_text),
-                        contentScale = ContentScale.Fit,
-                        contentDescription = ""
-                    )
-                },
-                trailingIcon = {
-                    Image(
-                        modifier = Modifier.padding(end = 8.sdp).size(8.sdp),
-                        painter = painterResource(resource = Res.drawable.ic_drop_down),
-                        contentScale = ContentScale.Fit,
-                        contentDescription = ""
-                    )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 12.ssp, color = Color.White, fontFamily = FontPoppins, fontWeight = FontWeight.Medium
+                    ),
+                    shape = RoundedCornerShape(6.sdp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedBorderColor = Color(0xFF3E3D46),
+                        focusedBorderColor = Color(0xFF3E3D46),
+                        cursorColor = Color.White,
+                        disabledBorderColor = Color(0xFF3E3D46),
+                    ),
+                    leadingIcon = {
+                        Icon(
+                            modifier = Modifier.padding(start = 10.sdp, end = 10.sdp).size(18.sdp),
+                            imageVector = Icons.Filled.CalendarViewWeek,
+                            tint = Color.White,
+                            contentDescription = ""
+                        )
+                    },
+                    trailingIcon = {
+                        Image(
+                            modifier = Modifier.padding(end = 8.sdp).size(8.sdp),
+                            painter = painterResource(resource = Res.drawable.ic_drop_down),
+                            contentScale = ContentScale.Fit,
+                            contentDescription = ""
+                        )
+                    })
+
+                BarCodeEditTextView("Please Enter Text", "Text", inputText, onValueChange = {
+                    inputText = it
                 })
 
-            when (selectedType) {
-                "Text" -> {
-                    TextQR(onNavigate)
-                }
-
-                "Website" -> {
-                    WebsiteQR(onNavigate)
-                }
-
-                "Email" -> {
-                    EmailQR(onNavigate)
-                }
-
-                "SMS" -> {
-                    SMSQR(onNavigate)
-                }
-
-                "Wi-Fi" -> {
-                    WifiQR(onNavigate)
-                }
-
-                "Phone" -> {
-                    PhoneQR(onNavigate)
-                }
-
-                "Calendar" -> {
-                    CalendarQR(onNavigate)
+                if (inputText.isEmpty().not()) {
+                    BarCodePreview(
+                        data = inputText,
+                        type = selectedTypeFormat,
+                        snackbarHostState = snackbarHostState
+                    )
                 }
             }
         }
-    }
 
-    if (showSheet) {
-        QRTypeBottomSheet(
-            selectedIndex = selectedIndex,
-            callBack = { index, data ->
-                showSheet = false
-                selectedIndex = index
-                selectedType = data.title
-            },
-            onDismiss = { showSheet = false }
-        )
+        if (showSheet) {
+            BarCodeTypeBottomSheet(
+                selectedIndex = selectedIndex,
+                callBack = { index, data ->
+                    showSheet = false
+                    selectedIndex = index
+                    selectedTypeTitle = data.title
+                    selectedTypeFormat = data.type
+                },
+                onDismiss = { showSheet = false }
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QRTypeBottomSheet(
+fun BarCodeTypeBottomSheet(
     selectedIndex: Int,
-    callBack: (Int, QRType) -> Unit,
+    callBack: (Int, BarCodeDataType) -> Unit,
     onDismiss: () -> Unit
 ) {
     val FontPoppins = FontFamily(
@@ -286,14 +281,16 @@ fun QRTypeBottomSheet(
         containerColor = Color.Transparent,
         dragHandle = {}
     ) {
-        val list = arrayListOf<QRType>()
-        list.add(QRType(Res.drawable.ic_text_blue, "Text"))
-        list.add(QRType(Res.drawable.ic_website, "Website"))
-        list.add(QRType(Res.drawable.ic_email, "Email"))
-        list.add(QRType(Res.drawable.ic_sms, "SMS"))
-        list.add(QRType(Res.drawable.ic_wifi, "Wi-Fi"))
-        list.add(QRType(Res.drawable.ic_phone, "Phone"))
-        list.add(QRType(Res.drawable.ic_calendar, "Calendar"))
+        val list = arrayListOf<BarCodeDataType>()
+        list.add(BarCodeDataType("ITF", BarcodeFormat.ITF))
+        list.add(BarCodeDataType("Codebar", BarcodeFormat.Codabar))
+        list.add(BarCodeDataType("Code39", BarcodeFormat.Code39))
+        list.add(BarCodeDataType("Code128", BarcodeFormat.Code128))
+        list.add(BarCodeDataType("UPC E", BarcodeFormat.UPCE))
+        list.add(BarCodeDataType("UPC A", BarcodeFormat.UPCA))
+        list.add(BarCodeDataType("EAN 13", BarcodeFormat.EAN13))
+        list.add(BarCodeDataType("EAN 8", BarcodeFormat.EAN8))
+        list.add(BarCodeDataType("Code 93", BarcodeFormat.Code93))
 
         Column(
             modifier = Modifier
@@ -309,7 +306,7 @@ fun QRTypeBottomSheet(
             )
 
             Text(
-                text = "Choose QR Code type",
+                text = "Choose Bar Code Type",
                 modifier = Modifier.padding(top = 20.sdp),
                 fontSize = 14.ssp,
                 style = TextStyle(
@@ -329,10 +326,10 @@ fun QRTypeBottomSheet(
                                 .padding(vertical = 8.sdp, horizontal = 4.sdp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Image(
+                            Icon(
                                 modifier = Modifier.size(18.sdp),
-                                painter = painterResource(resource = data.icon),
-                                contentScale = ContentScale.Fit,
+                                imageVector = Icons.Filled.CalendarViewWeek,
+                                tint = Color.White,
                                 contentDescription = ""
                             )
                             Text(
@@ -365,7 +362,7 @@ fun QRTypeBottomSheet(
 }
 
 @Composable
-fun QREditTextView(
+fun BarCodeEditTextView(
     labelText: String, placeHolder: String, inputText: String, onValueChange: (String) -> Unit
 ) {
     val FontPoppins = FontFamily(
@@ -421,7 +418,12 @@ fun QREditTextView(
 }
 
 @Composable
-fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (String) -> Unit) {
+fun ColumnScope.BarCodePreview(
+    data: String,
+    type: BarcodeFormat,
+    snackbarHostState: SnackbarHostState
+) {
+    val scope = rememberCoroutineScope()
     val FontPoppins = FontFamily(
         Font(Res.font.poppins_regular, FontWeight.Normal),
         Font(Res.font.poppins_medium, FontWeight.Medium),
@@ -430,7 +432,7 @@ fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (String) -> Unit) {
     )
 
     Text(
-        text = "QR Code Preview",
+        text = "Bar Code Preview",
         modifier = Modifier.padding(top = 24.sdp)
             .background(Color(0xFF006588), RoundedCornerShape(topEnd = 50.sdp, bottomEnd = 50.sdp))
             .padding(vertical = 4.sdp)
@@ -443,60 +445,31 @@ fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (String) -> Unit) {
         fontSize = 12.ssp
     )
 
-    val painter = rememberQrKitPainter(inputText) {
-        colors = QrKitColors(
-            darkBrush = QrKitBrush.customBrush { SolidColor(Color.White) }
-        )
-    }
+    val barCodePainter = rememberBarcodePainter(data, type, brush = SolidColor(Color.White), onError = { throwable ->
+        scope.launch {
+            snackbarHostState.showSnackbar("Error occurred: ${throwable.message}")
+        }
+        // Return a fallback painter, for example, an empty painter
+        EmptyPainter()
+    })
 
     Box(
-        modifier = Modifier.padding(top = 20.sdp).align(Alignment.CenterHorizontally).size(170.sdp)
+        modifier = Modifier
+            .padding(top = 42.sdp, start = 20.sdp, end = 20.sdp)
+            .background(
+                color = Color(0xFF252528),
+                shape = RoundedCornerShape(10.sdp)
+            )
+            .padding(horizontal = 20.sdp)
+            .align(Alignment.CenterHorizontally)
     ) {
-        Box(
+        Image(
+            painter = barCodePainter,
+            contentDescription = null,
             modifier = Modifier
-                .background(Color(0xFF252528), RoundedCornerShape(6.sdp))
-                .clip(RoundedCornerShape(6.sdp))
-                .align(Alignment.Center)
-                .size(150.sdp),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painter, contentDescription = null, modifier = Modifier.size(130.sdp)
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .background(Color(0xFF007AFF), RoundedCornerShape(50.sdp))
-                .padding(top = 5.sdp, bottom = 5.sdp, start = 10.sdp, end = 12.sdp)
-                .align(Alignment.BottomCenter)
-                .clickable {
-                    onNavigate(
-                        AppScreen.QRCustomization.route.replace(
-                            "{${AppConstants.QR_TEXT}}", inputText
-                        )
-                    )
-                },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.size(14.sdp),
-                painter = painterResource(resource = Res.drawable.ic_magic_tool),
-                contentScale = ContentScale.Fit,
-                contentDescription = ""
-            )
-
-            Text(
-                text = "Customize",
-                modifier = Modifier.padding(start = 6.sdp),
-                fontSize = 10.ssp,
-                style = TextStyle(
-                    color = Color.White,
-                    fontFamily = FontPoppins,
-                    fontWeight = FontWeight.Medium
-                )
-            )
-        }
+                .fillMaxWidth()
+                .height(100.sdp)
+        )
     }
 }
 

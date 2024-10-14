@@ -37,7 +37,7 @@ fun NavHostMain(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.QRGenerator.route,
+        startDestination = AppScreen.QRKitMainScreen.route,
         modifier = Modifier
             .fillMaxSize(),
         enterTransition = {
@@ -65,6 +65,9 @@ fun NavHostMain(
             )
         }
     ) {
+        composable(route = AppScreen.QRKitMainScreen.route) {
+            QRKitMainScreen(onNavigate)
+        }
         composable(route = AppScreen.QRGenerator.route) {
             QrGeneratorView(onNavigate)
         }
@@ -78,6 +81,9 @@ fun NavHostMain(
         }
         composable(route = AppScreen.QRScanner.route) {
             QrScannerView(onNavigate = onNavigate)
+        }
+        composable(route = AppScreen.BarCodeGenerator.route) {
+            BarCodeGeneratorScreen(onNavigate = onNavigate)
         }
     }
 }
@@ -98,8 +104,10 @@ fun navigateTo(
 }
 
 sealed class AppScreen(val route: String) {
+    data object QRKitMainScreen : AppScreen("nav_qr_main_screen")
     data object QRGenerator : AppScreen("nav_qr_generator")
     data object QRCustomization : AppScreen("nav_qr_customization{${AppConstants.QR_TEXT}}")
     data object QRScanner : AppScreen("nav_qr_scanner")
+    data object BarCodeGenerator : AppScreen("nav_qr_barcode_generator")
 }
 
