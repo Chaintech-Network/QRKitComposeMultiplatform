@@ -201,6 +201,69 @@ QrScanner(
 
 <br><br>
 
+## 🏷️ Barcode Generator
+<img width="960" alt="QRCodeGenerator" src="/assets/CMP_QRKit_Barcode_Generator.png">
+
+You can easily generate and display barcodes using the `rememberBarcodePainter` function in your Compose application.
+
+```kotlin
+val barCodePainter = rememberBarcodePainter(
+    content = data, 
+    format = type, 
+    brush = SolidColor(Color.White), 
+    onError = { throwable ->
+        scope.launch {
+            snackbarHostState.showSnackbar("Error occurred: ${throwable.message}")
+        }
+        // Return a fallback painter, for example, an empty painter
+        EmptyPainter()
+    }
+)
+
+Image(
+    painter = barCodePainter,
+    contentDescription = null,
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(100.sdp)
+)
+```
+
+<br>🔗 For more details, follow the implementation in [BarCodeGeneratorScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/BarCodeGeneratorScreen.kt)
+
+<br>The following table explains the parameters used in the `rememberBarcodePainter` function.
+
+| Parameter       | Description                                                                                                       |
+|-----------------|-------------------------------------------------------------------------------------------------------------------|
+| `content`       | The string data to be encoded into the barcode.                                                                   |
+| `format`        | The format of the barcode to be generated (e.g., `BarcodeFormat.QR_CODE`, `CODE_128`, etc.).                      |
+| `brush`         | The `Brush` used to paint the barcode. By default, it uses `SolidColor(Color.Black)`.                             |
+| `onError`       | A callback function that handles errors during barcode generation. It returns a `Painter` to display in case of failure.|
+| `pathGenerator` | Function that generates the path for the barcode. It defines how the barcode lines or patterns are drawn. The default is `::defaultBarcodePathGenerator`. |
+| `factory`       | A `PainterFactory` used to create the `Painter` for rendering the barcode. The default is `DefaultPainterFactory()`.|
+
+<br>
+
+### 🧩 Barcode Formats
+
+| Barcode Format | Description | Limitations |
+|----------------|-------------|-------------|
+| `Codabar`      | **Codabar** is a simple barcode used for libraries, blood banks, and airbills. | Can encode numbers and a few special characters (A, B, C, D, +, -, $, /, :). Limited character set. |
+| `Code39`       | **Code 39** is widely used in industrial applications. It can encode alphanumeric characters and a few special symbols. | Lower data density compared to other formats. |
+| `Code93`       | **Code 93** is an enhanced version of Code 39, offering higher density and encoding of additional characters. | Limited to alphanumeric data, but can encode more characters than Code 39. |
+| `Code128`      | **Code 128** is a high-density barcode used for logistics and shipping. It can encode all 128 ASCII characters. | More complex and longer compared to simpler formats like Code 39. |
+| `EAN8`         | **EAN-8** is a shorter version of EAN-13, used on smaller products where space is limited. | Can encode only 8 digits, limiting the amount of information. |
+| `EAN13`        | **EAN-13** is the standard barcode for products, mainly used in retail. | Can encode only numeric digits, no letters or symbols. |
+| `ITF`          | **ITF (Interleaved 2 of 5)** is used in packaging and logistics. | Can encode only numeric digits and may be prone to misreading without proper scanning equipment. |
+| `UPCA`         | **UPC-A** is a barcode format used for retail products in the US, encoding 12 digits. | Can encode only numeric digits and space is limited to 12 characters. |
+| `UPCE`         | **UPC-E** is a compressed version of UPC-A, used on smaller packages. | Limited to encoding fewer digits (6–8) and primarily used in specific retail scenarios. |
+
+
+
+
+
+<br><br>
+
 ## 📖 Detailed Explanation
 
 ✨ **See the QR Code Generator in Action!**
