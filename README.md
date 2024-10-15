@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.0.0")
+    implementation("network.chaintech:qr-kit:3.0.1")
 }
 ```   
 <br>
@@ -55,7 +55,10 @@ QrScanner(
     openImagePicker: Boolean,
     onCompletion: (String) -> Unit,
     imagePickerHandler: (Boolean) -> Unit,
-    onFailure: (String) -> Unit
+    onFailure: (String) -> Unit,
+    overlayShape = OverlayShape.Square,
+    overlayColor = Color(0x88000000),
+    overlayBorderColor = Color.White
 )
 ```
 
@@ -65,6 +68,9 @@ QrScanner(
 * `openImagePicker`: Boolean indicating whether to launch the picker for selecting images.
 * `imagePickerHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
 * `onFailure`: Callback invoked when there's a failure during QR code scanning.<br>
+* `overlayShape`: The color of the overlay that dims the area around the scanning region. The default is a semi-transparent black color.<br>
+* `overlayColor`: The color of the border around the scanning region. The default is white.<br>
+* `overlayBorderColor`: Allows the user to provide a custom overlay design. If no custom overlay is provided, a default one is applied.<br>
 
 🔗 For more details, follow the implementation in [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
 
