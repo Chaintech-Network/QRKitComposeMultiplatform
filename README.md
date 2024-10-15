@@ -58,7 +58,8 @@ QrScanner(
     onFailure: (String) -> Unit,
     overlayShape = OverlayShape.Square,
     overlayColor = Color(0x88000000),
-    overlayBorderColor = Color.White
+    overlayBorderColor = Color.White,
+    customOverlay: (ContentDrawScope.() -> Unit)? = null
 )
 ```
 
@@ -68,8 +69,9 @@ QrScanner(
 * `openImagePicker`: Boolean indicating whether to launch the picker for selecting images.
 * `imagePickerHandler`: Callback invoked to indicate the status of the gallery, whether it's open or closed.
 * `onFailure`: Callback invoked when there's a failure during QR code scanning.<br>
-* `overlayShape`: The color of the overlay that dims the area around the scanning region. The default is a semi-transparent black color.<br>
-* `overlayColor`: The color of the border around the scanning region. The default is white.<br>
+* `overlayShape`: Defines the shape of the overlay that appears over the camera view. Square and Rectangle<br>
+* `overlayColor`: The color of the overlay that dims the area around the scanning region. The default is a semi-transparent black color.<br>
+* `overlayBorderColor`: The color of the border around the scanning region. The default is white.<br>
 * `overlayBorderColor`: Allows the user to provide a custom overlay design. If no custom overlay is provided, a default one is applied.<br>
 
 🔗 For more details, follow the implementation in [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
