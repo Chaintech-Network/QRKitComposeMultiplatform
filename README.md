@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.0.2")
+    implementation("network.chaintech:qr-kit:3.0.3")
 }
 ```   
 <br>
