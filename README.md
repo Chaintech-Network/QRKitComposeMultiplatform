@@ -74,7 +74,7 @@ QrScanner(
 * `overlayBorderColor`: The color of the border around the scanning region. The default is white.<br>
 * `customOverlay`: Allows the user to provide a custom overlay design. If no custom overlay is provided, a default one is applied.<br>
 
-🔗 For more details, follow the implementation in [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
+🔗 For more details, follow the implementation in [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform/blob/main/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
 
 <br>
 
