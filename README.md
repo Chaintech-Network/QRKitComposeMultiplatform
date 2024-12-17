@@ -101,31 +101,25 @@ QrScanner(
 
     ```kotlin
     val centerLogo = painterResource(Res.drawable.ic_youtube)
-    
-    val painter = rememberQrKitPainter(
-        data = inputText,
-        options = {
-            centerLogo { painter = centerLogo }
-    
-            qrColors {
-                darkColorBrush = QrKitBrush.customBrush {
-                    Brush.linearGradient(
-                        0f to Color.White,
-                        1f to Color.White,
-                        end = Offset(it, it)
-                    )
-                }
-                frameColorBrush = QrKitBrush.solidBrush(Color.Blue)
+  
+    val painter = rememberQrKitPainter(inputText) {
+        shapes = QrKitShapes(
+            ballShape = getSelectedQrBall(QrBallType.SquareQrBall()),
+            darkPixelShape = getSelectedPixel(QrPixelType.SquarePixel()),
+            frameShape = getSelectedFrameShape(QrFrameType.SquareFrame()),
+            codeShape = getSelectedPattern(PatternType.SquarePattern),
+        )
+        colors = QrKitColors(
+            darkBrush = QrKitBrush.customBrush {
+                Brush.linearGradient(
+                    0f to color[0],
+                    1f to color[1],
+                    end = Offset(it, it)
+                )
             }
-    
-            qrShapes {
-                ballShape = getSelectedQrBall(QrBallType.SquareQrBall())
-                darkPixelShape = getSelectedPixel(PixelType.SquarePixel())
-                frameShape = getSelectedQrFrame(QrFrameType.SquareQrFrame())
-                qrCodePattern = getSelectedPattern(PatternType.SquarePattern)
-            }
-        }
-    )
+        )
+        logo = QrKitLogo(centerLogo)
+    }
     ```
 
   ### 📖 Step by Step Implementation
@@ -138,10 +132,10 @@ QrScanner(
        ```
 
   #### 2. Setting the Center Logo
-    - Set the center logo of the QR code using the `centerLogo` function.
+    - Set the center logo of the QR code using the `QrKitLogo` function.
 
        ```kotlin
-       centerLogo { painter = centerLogo }
+       QrKitLogo(centerLogo)
        ```
 
   #### 3. Configuring Colors
@@ -150,14 +144,14 @@ QrScanner(
        ```kotlin
        qrColors {
             // configure colors here
-           darkColorBrush = QrKitBrush.customBrush {
+           darkBrush = QrKitBrush.customBrush {
                Brush.linearGradient(
                    0f to Color.White,
                    1f to Color.White,
                    end = Offset(it, it)
                )
            }
-           frameColorBrush = QrKitBrush.solidBrush(Color.Blue)
+           frameBrush = QrKitBrush.solidBrush(Color.Blue)
        }
        ```
 
@@ -177,7 +171,7 @@ QrScanner(
       | **ballShape**       | Sets the ball shape to a square QR ball.   | `ballShape = getSelectedQrBall(QrBallType.SquareQrBall())`      |
       | **darkPixelShape**  | Sets the dark pixel shape to a square pixel.| `darkPixelShape = getSelectedPixel(PixelType.SquarePixel())`     |
       | **frameShape**      | Sets the frame shape to a square QR frame. | `frameShape = getSelectedQrFrame(QrFrameType.SquareQrFrame())`   |
-      | **qrCodePattern**   | Sets the QR code pattern to a square pattern.| `qrCodePattern = getSelectedPattern(PatternType.SquarePattern)`   |
+      | **codeShape**   | Sets the QR code pattern to a square pattern.| `codeShape = getSelectedPattern(PatternType.SquarePattern)`   |
 
 <br>
 
