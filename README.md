@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.0.5")
+    implementation("network.chaintech:qr-kit:3.0.6")
 }
 ```   
 <br>
@@ -59,7 +59,8 @@ QrScanner(
     overlayShape = OverlayShape.Square,
     overlayColor = Color(0x88000000),
     overlayBorderColor = Color.White,
-    customOverlay: (ContentDrawScope.() -> Unit)? = null
+    customOverlay: (ContentDrawScope.() -> Unit)? = null,
+    permissionDeniedView: @Composable (() -> Unit?)? = null
 )
 ```
 
@@ -73,8 +74,9 @@ QrScanner(
 * `overlayColor`: The color of the overlay that dims the area around the scanning region. The default is a semi-transparent black color.<br>
 * `overlayBorderColor`: The color of the border around the scanning region. The default is white.<br>
 * `customOverlay`: Allows the user to provide a custom overlay design. If no custom overlay is provided, a default one is applied.<br>
+* `permissionDeniedView`: Allows the user to provide a custom view when camera permission is denied. If no custom view is provided, a default one is shown.<br>
 
-🔗 For more details, follow the implementation in [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform/blob/main/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
+🔗 For more details, follow the implementation in [QrScannerScreen.kt](https://github.com/Chaintech-Network/QRKitComposeMultiplatform_org/blob/qrkit/composeApp/src/commonMain/kotlin/org/qrcodedemo/app/ui/QrScannerScreen.kt)
 
 <br>
 
