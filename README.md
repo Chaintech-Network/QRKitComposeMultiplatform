@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.0.6")
+    implementation("network.chaintech:qr-kit:3.0.8")
 }
 ```   
 <br>
@@ -96,6 +96,27 @@ QrScanner(
         contentDescription = null, 
         modifier = Modifier.size(100.dp)
     )
+    ```
+
+- ### Sharable QR Code Generation
+  Generate a Sharable QR code using the QRCodeImage function. Here you will get a bitmap file which can be shared:
+
+    ```kotlin
+    var qrImageBitmap: ImageBitmap? = null
+    
+    QRCodeImage(
+       modifier = Modifier.size(130.sdp),
+       url = inputText,
+       contentDescription = "Sharable QR Code",
+       onSuccess = { qrImage ->
+           qrImage?.let {
+               qrImageBitmap = it
+           }
+       }
+    )
+  
+    // To share the QR Code use the below code
+    shareQrCodeImage(qrImageBitmap, "QR Code")
     ```
 
 - ### Designed QR Code Generation

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,12 +22,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
@@ -66,10 +70,12 @@ import qrcodedemo.composeapp.generated.resources.poppins_bold
 import qrcodedemo.composeapp.generated.resources.poppins_medium
 import qrcodedemo.composeapp.generated.resources.poppins_regular
 import qrcodedemo.composeapp.generated.resources.poppins_semibold
+import qrgenerator.QRCodeImage
 import qrgenerator.qrkitpainter.QrKitBrush
 import qrgenerator.qrkitpainter.QrKitColors
 import qrgenerator.qrkitpainter.customBrush
 import qrgenerator.qrkitpainter.rememberQrKitPainter
+import qrgenerator.shareQrCodeImage
 
 @Composable
 fun QrGeneratorView(onNavigate: (String) -> Unit) {
@@ -443,59 +449,134 @@ fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (String) -> Unit) {
         fontSize = 12.ssp
     )
 
+    var showSharable by remember { mutableStateOf(false) }
+
+    /** Painter for displaying QR Code */
     val painter = rememberQrKitPainter(inputText) {
         colors = QrKitColors(
             darkBrush = QrKitBrush.customBrush { SolidColor(Color.White) }
         )
     }
 
-    Box(
-        modifier = Modifier.padding(top = 20.sdp).align(Alignment.CenterHorizontally).size(170.sdp)
+    var qrImageBitmap: ImageBitmap? = null
+
+    Column(
+        modifier = Modifier
+            .padding(top = 20.sdp)
+            .align(Alignment.CenterHorizontally)
     ) {
-        Box(
+        Row(
             modifier = Modifier
-                .background(Color(0xFF252528), RoundedCornerShape(6.sdp))
-                .clip(RoundedCornerShape(6.sdp))
-                .align(Alignment.Center)
-                .size(150.sdp),
-            contentAlignment = Alignment.Center
+                .align(Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painter, contentDescription = null, modifier = Modifier.size(130.sdp)
+            Text("Show sharable QR code", color = Color.White)
+            Spacer(modifier = Modifier.width(8.sdp))
+            Switch(
+                checked = showSharable,
+                onCheckedChange = {
+                    showSharable = it
+                }
             )
         }
 
-        Row(
+        Box(
             modifier = Modifier
-                .background(Color(0xFF007AFF), RoundedCornerShape(50.sdp))
-                .padding(top = 5.sdp, bottom = 5.sdp, start = 10.sdp, end = 12.sdp)
-                .align(Alignment.BottomCenter)
-                .clickable {
-                    onNavigate(
-                        AppScreen.QRCustomization.route.replace(
-                            "{${AppConstants.QR_TEXT}}", inputText
-                        )
-                    )
-                },
-            verticalAlignment = Alignment.CenterVertically
+                .size(170.sdp)
+                .padding(top = 10.sdp)
         ) {
-            Image(
-                modifier = Modifier.size(14.sdp),
-                painter = painterResource(resource = Res.drawable.ic_magic_tool),
-                contentScale = ContentScale.Fit,
-                contentDescription = ""
-            )
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFF252528), RoundedCornerShape(6.sdp))
+                    .clip(RoundedCornerShape(6.sdp))
+                    .align(Alignment.Center)
+                    .size(150.sdp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (showSharable) {
+                    /** Use this if you just want to display a Sharable QR Code */
+                    QRCodeImage(
+                        modifier = Modifier.size(130.sdp),
+                        url = inputText,
+                        contentDescription = "Sharable QR Code",
+                        onSuccess = { qrImage ->
+                            qrImage?.let {
+                                qrImageBitmap = it
+                            }
+                        }
+                    )
+                } else {
+                    /** Use this if you just want to display the QR Code */
+                    Image(
+                        painter = painter, contentDescription = null, modifier = Modifier.size(130.sdp)
+                    )
+                }
+            }
 
-            Text(
-                text = "Customize",
-                modifier = Modifier.padding(start = 6.sdp),
-                fontSize = 10.ssp,
-                style = TextStyle(
-                    color = Color.White,
-                    fontFamily = FontPoppins,
-                    fontWeight = FontWeight.Medium
+            Row(
+                modifier = Modifier
+                    .background(Color(0xFF007AFF), RoundedCornerShape(50.sdp))
+                    .padding(top = 5.sdp, bottom = 5.sdp, start = 10.sdp, end = 12.sdp)
+                    .align(Alignment.BottomCenter)
+                    .clickable {
+                        onNavigate(
+                            AppScreen.QRCustomization.route.replace(
+                                "{${AppConstants.QR_TEXT}}", inputText
+                            )
+                        )
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.size(14.sdp),
+                    painter = painterResource(resource = Res.drawable.ic_magic_tool),
+                    contentScale = ContentScale.Fit,
+                    contentDescription = ""
                 )
-            )
+
+                Text(
+                    text = "Customize",
+                    modifier = Modifier.padding(start = 6.sdp),
+                    fontSize = 10.ssp,
+                    style = TextStyle(
+                        color = Color.White,
+                        fontFamily = FontPoppins,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+        }
+
+        if (showSharable) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 14.sdp, bottom = 5.sdp)
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        qrImageBitmap?.let {
+                            shareQrCodeImage(qrImageBitmap, "QR Code")
+                        }
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Share,
+                    modifier = Modifier.size(16.sdp),
+                    tint = Color.White,
+                    contentDescription = ""
+                )
+
+                Text(
+                    text = "Share QR Code",
+                    modifier = Modifier.padding(start = 6.sdp),
+                    fontSize = 12.ssp,
+                    style = TextStyle(
+                        color = Color.White,
+                        fontFamily = FontPoppins,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
         }
     }
 }

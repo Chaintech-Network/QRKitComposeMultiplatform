@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import qrgenerator.AppContext
 
 class AndroidApp : Application() {
     companion object {
@@ -14,6 +15,7 @@ class AndroidApp : Application() {
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
+        AppContext.apply { set(applicationContext) }
     }
 }
 
