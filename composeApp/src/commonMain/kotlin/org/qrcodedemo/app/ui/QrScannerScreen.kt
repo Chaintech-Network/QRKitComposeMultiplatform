@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.filled.ZoomIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -62,12 +63,15 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val zoomLevels = listOf(1f, 2f, 3f)
+    var selectedZoomIndex = 0
 
     var qrCodeURL by remember { mutableStateOf("") }
     var flashlightOn by remember { mutableStateOf(false) }
     var openImagePicker by remember { mutableStateOf(false) }
     var overlayShape by remember { mutableStateOf(OverlayShape.Square) }
     var cameraLens by remember { mutableStateOf(CameraLens.Back) }
+    var currentZoomLevel by remember { mutableStateOf(zoomLevels[selectedZoomIndex]) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -85,6 +89,7 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
                 cameraLens = cameraLens,
                 openImagePicker = openImagePicker,
                 onCompletion = { qrCodeURL = it },
+                zoomLevel = currentZoomLevel,
                 imagePickerHandler = { openImagePicker = it },
                 onFailure = {
                     coroutineScope.launch {
@@ -113,7 +118,15 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
                         } else CameraLens.Front
                     },
                     onOpenGallery = { openImagePicker = true },
-                    onShapeChange = { overlayShape = it }
+                    onShapeChange = { overlayShape = it },
+                    onZoomLevelChange = {
+                        if (selectedZoomIndex == (zoomLevels.size-1)) {
+                            selectedZoomIndex = 0
+                        } else {
+                            selectedZoomIndex+= 1
+                        }
+                        currentZoomLevel = zoomLevels[selectedZoomIndex]
+                    }
                 )
             } else {
                 Button(
@@ -156,7 +169,8 @@ fun BoxScope.BottomActions(
     onToggleFlash: () -> Unit,
     onSwitchCamera: () -> Unit,
     onOpenGallery: () -> Unit,
-    onShapeChange: (OverlayShape) -> Unit
+    onShapeChange: (OverlayShape) -> Unit,
+    onZoomLevelChange: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -178,6 +192,14 @@ fun BoxScope.BottomActions(
                     imageVector = if (flashlightOn) Icons.Filled.FlashOn else Icons.Filled.FlashOff,
                     contentDescription = "Flash",
                     modifier = Modifier.size(20.sdp).clickable(onClick = onToggleFlash)
+                )
+                DividerDot()
+                Icon(
+                    imageVector = Icons.Filled.ZoomIn,
+                    contentDescription = "Zoom",
+                    modifier = Modifier.size(20.sdp).clickable(onClick = {
+                        onZoomLevelChange()
+                    })
                 )
                 DividerDot()
                 Image(
