@@ -43,6 +43,17 @@ commonMain.dependencies {
     <key>NSPhotoLibraryUsageDescription</key><string>$(PRODUCT_NAME) photos description.</string>
     ```
 
+- **Important Note**: if you are getting Manifest Merger Failed issue, add the following to your Android Manifest file:
+
+    ```kotlin
+    tools:replace="android:name"
+    ```
+    ```kotlin
+    tools:replace="android:allowBackup"
+    ```
+
+<br>
+
 ### 📷 QR Code Scanner
 
 <img width="960" alt="QR-code-generator-scanner" src="/assets/CMP_QRKit_scanner.gif">
@@ -60,6 +71,7 @@ QrScanner(
     overlayColor = Color(0x88000000),
     overlayBorderColor = Color.White,
     zoomLevel: Float = 1f,
+    maxZoomLevel: Float = 3f,
     customOverlay: (ContentDrawScope.() -> Unit)? = null,
     permissionDeniedView: @Composable (() -> Unit?)? = null
 )
@@ -75,6 +87,7 @@ QrScanner(
 * `overlayColor`: The color of the overlay that dims the area around the scanning region. The default is a semi-transparent black color.<br>
 * `overlayBorderColor`: The color of the border around the scanning region. The default is white.<br>
 * `zoomLevel`: Defines the zoom level of the camera (1f, 2f, 3f ...).<br>
+* `maxZoomLevel`: Defines the maximum zoom ratio the scanner will reach. It acts as an upper bound for the zoomLevel parameter.<br>
 * `customOverlay`: Allows the user to provide a custom overlay design. If no custom overlay is provided, a default one is applied.<br>
 * `permissionDeniedView`: Allows the user to provide a custom view when camera permission is denied. If no custom view is provided, a default one is shown.<br>
 

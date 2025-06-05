@@ -90,6 +90,7 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
                 openImagePicker = openImagePicker,
                 onCompletion = { qrCodeURL = it },
                 zoomLevel = currentZoomLevel,
+                maxZoomLevel = 3f,
                 imagePickerHandler = { openImagePicker = it },
                 onFailure = {
                     coroutineScope.launch {

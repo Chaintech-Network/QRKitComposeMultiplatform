@@ -13,12 +13,12 @@ jna = "5.14.0"
 kotlin = "2.1.20"
 compose = "1.8.0"
 androidx-activityCompose = "1.10.1"
-androidx-appcompat = "1.7.0"
-compose-uitooling = "1.8.1"
+androidx-appcompat = "1.7.1"
+compose-uitooling = "1.8.2"
 navigationCompose = "2.8.0-alpha02"
-androidx-uiTest = "1.8.1"
+androidx-uiTest = "1.8.2"
 
-qrKit = "3.0.6"
+qrKit = "3.1.0"
 sdpSspComposeMultiplatform = "1.0.4"
 
 [libraries]
