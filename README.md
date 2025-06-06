@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.0.9")
+    implementation("network.chaintech:qr-kit:3.1.1")
 }
 ```   
 <br>
@@ -72,6 +72,7 @@ QrScanner(
     overlayBorderColor = Color.White,
     zoomLevel: Float = 1f,
     maxZoomLevel: Float = 3f,
+    imagePickerDialogStyle: ImagePickerDialogStyle = ImagePickerDialogStyle(),
     customOverlay: (ContentDrawScope.() -> Unit)? = null,
     permissionDeniedView: @Composable (() -> Unit?)? = null
 )
@@ -88,6 +89,7 @@ QrScanner(
 * `overlayBorderColor`: The color of the border around the scanning region. The default is white.<br>
 * `zoomLevel`: Defines the zoom level of the camera (1f, 2f, 3f ...).<br>
 * `maxZoomLevel`: Defines the maximum zoom ratio the scanner will reach. It acts as an upper bound for the zoomLevel parameter.<br>
+* `imagePickerDialogStyle`: Pass ImagePicker dialog customisation like title, color, icon etc.<br>
 * `customOverlay`: Allows the user to provide a custom overlay design. If no custom overlay is provided, a default one is applied.<br>
 * `permissionDeniedView`: Allows the user to provide a custom view when camera permission is denied. If no custom view is provided, a default one is shown.<br>
 

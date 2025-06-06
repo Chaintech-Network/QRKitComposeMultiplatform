@@ -18,7 +18,7 @@ compose-uitooling = "1.8.2"
 navigationCompose = "2.8.0-alpha02"
 androidx-uiTest = "1.8.2"
 
-qrKit = "3.1.0"
+qrKit = "3.1.1"
 sdpSspComposeMultiplatform = "1.0.4"
 
 [libraries]
