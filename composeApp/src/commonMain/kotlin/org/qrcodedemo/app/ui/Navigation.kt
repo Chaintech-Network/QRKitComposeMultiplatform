@@ -7,16 +7,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 
 object AppConstants {
     const val BACK_CLICK_ROUTE = "BACK_CLICK_ROUTE"
-    const val QR_TEXT = "qr_text"
+    const val NAV_QR_GENERATOR = "nav_qr_generator"
+    const val NAV_QR_CUSTOMISATION = "nav_qr_customization"
+    const val NAV_QR_SCANNER = "nav_qr_scanner"
+    const val NAV_BARCODE_GENERATOR = "nav_qr_barcode_generator"
 }
+
+data class NavigationData(
+    val routeName: String,
+    val data: String = ""
+)
+
+@Serializable
+object QRKitMainScreenRoute
+
+@Serializable
+object QRGeneratorRoute
+
+@Serializable
+data class QRCustomizationRoute(val qrText: String)
+
+@Serializable
+object QRScannerRoute
+
+@Serializable
+object BarCodeGeneratorRoute
+
 
 @Composable
 fun QRKitNav() {
@@ -33,11 +57,11 @@ fun QRKitNav() {
 @Composable
 fun NavHostMain(
     navController: NavHostController = rememberNavController(),
-    onNavigate: (rootName: String) -> Unit,
+    onNavigate: (navigationData: NavigationData) -> Unit,
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.QRKitMainScreen.route,
+        startDestination = QRKitMainScreenRoute,
         modifier = Modifier
             .fillMaxSize(),
         enterTransition = {
@@ -65,49 +89,56 @@ fun NavHostMain(
             )
         }
     ) {
-        composable(route = AppScreen.QRKitMainScreen.route) {
+        composable<QRKitMainScreenRoute> {
             QRKitMainScreen(onNavigate)
         }
-        composable(route = AppScreen.QRGenerator.route) {
+
+        composable<QRGeneratorRoute> {
             QrGeneratorView(onNavigate)
         }
-        composable(route = AppScreen.QRCustomization.route, arguments = listOf(
-            navArgument(AppConstants.QR_TEXT) {
-                type = NavType.StringType
-            }
-        )) {
-            val inputText = (it.arguments?.getString(AppConstants.QR_TEXT) ?: "")
-            QRCustomizationView(inputText, onNavigate)
+
+        composable<QRCustomizationRoute> { backStackEntry ->
+            val args = backStackEntry.toRoute<QRCustomizationRoute>()
+            QRCustomizationView(args.qrText, onNavigate)
         }
-        composable(route = AppScreen.QRScanner.route) {
+
+        composable<QRScannerRoute> {
             QrScannerView(onNavigate = onNavigate)
         }
-        composable(route = AppScreen.BarCodeGenerator.route) {
+
+        composable<BarCodeGeneratorRoute> {
             BarCodeGeneratorScreen(onNavigate = onNavigate)
         }
     }
 }
 
 fun navigateTo(
-    routeName: String,
+    navigationData: NavigationData,
     navController: NavController
 ) {
-    when (routeName) {
+    when (navigationData.routeName) {
         AppConstants.BACK_CLICK_ROUTE -> {
             navController.popBackStack()
         }
 
+        AppConstants.NAV_QR_GENERATOR -> {
+            navController.navigate(QRGeneratorRoute)
+        }
+
+        AppConstants.NAV_QR_CUSTOMISATION -> {
+            navController.navigate(QRCustomizationRoute(qrText = navigationData.data))
+        }
+
+        AppConstants.NAV_QR_SCANNER -> {
+            navController.navigate(QRScannerRoute)
+        }
+
+        AppConstants.NAV_BARCODE_GENERATOR -> {
+            navController.navigate(BarCodeGeneratorRoute)
+        }
+
         else -> {
-            navController.navigate(routeName)
+            navController.navigate(navigationData.routeName)
         }
     }
 }
-
-sealed class AppScreen(val route: String) {
-    data object QRKitMainScreen : AppScreen("nav_qr_main_screen")
-    data object QRGenerator : AppScreen("nav_qr_generator")
-    data object QRCustomization : AppScreen("nav_qr_customization{${AppConstants.QR_TEXT}}")
-    data object QRScanner : AppScreen("nav_qr_scanner")
-    data object BarCodeGenerator : AppScreen("nav_qr_barcode_generator")
-}
-

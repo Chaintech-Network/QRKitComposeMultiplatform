@@ -50,7 +50,7 @@ import qrcodedemo.composeapp.generated.resources.img_qr_thumb
 import qrcodedemo.composeapp.generated.resources.img_scanner
 
 @Composable
-fun QRKitMainScreen(onNavigate: (String) -> Unit) {
+fun QRKitMainScreen(onNavigate: (NavigationData) -> Unit) {
     val FontSofia = FontFamily(
         Font(Res.font.SofiaSansCondensed_Light, FontWeight.Light),
         Font(Res.font.SofiaSansCondensed_Regular, FontWeight.Normal),
@@ -153,7 +153,7 @@ fun QRKitMainScreen(onNavigate: (String) -> Unit) {
                             shape = RoundedCornerShape(topStart = 20.sdp, topEnd = 60.sdp, bottomStart = 20.sdp, bottomEnd = 60.sdp)
                         )
                         .clickable {
-                            onNavigate(AppScreen.QRGenerator.route)
+                            onNavigate(NavigationData(routeName = AppConstants.NAV_QR_GENERATOR))
                         }
                 ) {
                     Image(
@@ -213,7 +213,7 @@ fun QRKitMainScreen(onNavigate: (String) -> Unit) {
                         )
                         .padding(horizontal = 16.sdp, vertical = 12.sdp)
                         .clickable {
-                            onNavigate(AppScreen.QRScanner.route)
+                            onNavigate(NavigationData(AppConstants.NAV_QR_SCANNER))
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -263,7 +263,7 @@ fun QRKitMainScreen(onNavigate: (String) -> Unit) {
                         shape = RoundedCornerShape(18.sdp)
                     )
                     .clickable {
-                        onNavigate(AppScreen.BarCodeGenerator.route)
+                        onNavigate(NavigationData(AppConstants.NAV_BARCODE_GENERATOR))
                     }
             ) {
                 Column(

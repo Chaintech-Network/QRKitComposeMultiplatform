@@ -45,9 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.EmptyPath
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -63,7 +60,6 @@ import qrcodedemo.composeapp.generated.resources.Res
 import qrcodedemo.composeapp.generated.resources.bg
 import qrcodedemo.composeapp.generated.resources.ic_done
 import qrcodedemo.composeapp.generated.resources.ic_drop_down
-import qrcodedemo.composeapp.generated.resources.img_qr_thumb
 import qrcodedemo.composeapp.generated.resources.poppins_bold
 import qrcodedemo.composeapp.generated.resources.poppins_medium
 import qrcodedemo.composeapp.generated.resources.poppins_regular
@@ -73,7 +69,7 @@ import qrgenerator.barcodepainter.EmptyPainter
 import qrgenerator.barcodepainter.rememberBarcodePainter
 
 @Composable
-fun BarCodeGeneratorScreen(onNavigate: (String) -> Unit) {
+fun BarCodeGeneratorScreen(onNavigate: (NavigationData) -> Unit) {
     var selectedTypeTitle by remember { mutableStateOf("ITF") }
     var selectedTypeFormat by remember { mutableStateOf(BarcodeFormat.ITF) }
     var selectedIndex by remember { mutableStateOf(0) }
@@ -159,7 +155,7 @@ fun BarCodeGeneratorScreen(onNavigate: (String) -> Unit) {
                         modifier = Modifier
                             .size(28.sdp)
                             .clickable {
-                                onNavigate(AppConstants.BACK_CLICK_ROUTE)
+                                onNavigate(NavigationData(AppConstants.BACK_CLICK_ROUTE))
                             },
                         tint = Color.White
                     )

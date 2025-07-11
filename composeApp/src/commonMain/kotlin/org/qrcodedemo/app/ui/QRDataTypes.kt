@@ -17,7 +17,7 @@ import qrgenerator.qrkitpainter.wifi
 data class QRType(val icon: DrawableResource, val title: String, var isSelected: Boolean = false)
 
 @Composable
-fun ColumnScope.TextQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.TextQR(onNavigate: (NavigationData) -> Unit) {
     var inputText by remember { mutableStateOf("Lorem Ipsum is simply dummy text of the printing and typesetting industry.") }
 
     QREditTextView("Please Enter Text", "Text", inputText, onValueChange = {
@@ -30,7 +30,7 @@ fun ColumnScope.TextQR(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ColumnScope.WebsiteQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.WebsiteQR(onNavigate: (NavigationData) -> Unit) {
     var websiteText by rememberSaveable { mutableStateOf("https://github.com/Chaintech-Network/QRKitComposeMultiplatform.git") }
 
     QREditTextView("Please Enter Website", "Website", websiteText, onValueChange = {
@@ -43,7 +43,7 @@ fun ColumnScope.WebsiteQR(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ColumnScope.EmailQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.EmailQR(onNavigate: (NavigationData) -> Unit) {
     var emailText by rememberSaveable { mutableStateOf("developer@gmail.com") }
     var copyToText by rememberSaveable { mutableStateOf("addeveloper@gmail.com") }
     var subjectText by rememberSaveable { mutableStateOf("Lorem ipsum") }
@@ -71,7 +71,7 @@ fun ColumnScope.EmailQR(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ColumnScope.SMSQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.SMSQR(onNavigate: (NavigationData) -> Unit) {
     var phoneNumberText by rememberSaveable { mutableStateOf("7665565456") }
     var subjectText by rememberSaveable { mutableStateOf("Lorem ipsum") }
 
@@ -89,7 +89,7 @@ fun ColumnScope.SMSQR(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ColumnScope.WifiQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.WifiQR(onNavigate: (NavigationData) -> Unit) {
     var authenticationText by rememberSaveable { mutableStateOf("Android@123") }
     var ssidText by rememberSaveable { mutableStateOf("Android Framework") }
     var pskText by rememberSaveable { mutableStateOf("") }
@@ -114,7 +114,7 @@ fun ColumnScope.WifiQR(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ColumnScope.PhoneQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.PhoneQR(onNavigate: (NavigationData) -> Unit) {
     var phoneNumberText by rememberSaveable { mutableStateOf("7889965675") }
 
     QREditTextView(
@@ -131,7 +131,7 @@ fun ColumnScope.PhoneQR(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ColumnScope.CalendarQR(onNavigate: (String) -> Unit) {
+fun ColumnScope.CalendarQR(onNavigate: (NavigationData) -> Unit) {
     var uidText by rememberSaveable { mutableStateOf("54543") }
     var stampText by rememberSaveable { mutableStateOf("STORE") }
     var organizerText by rememberSaveable { mutableStateOf("Angry Film Studio") }

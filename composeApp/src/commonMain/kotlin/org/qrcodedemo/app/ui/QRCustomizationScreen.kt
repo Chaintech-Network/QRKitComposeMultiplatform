@@ -81,6 +81,7 @@ import qrgenerator.qrkitpainter.QrFrameType
 import qrgenerator.qrkitpainter.QrKitBrush
 import qrgenerator.qrkitpainter.QrKitColors
 import qrgenerator.qrkitpainter.QrKitLogo
+import qrgenerator.qrkitpainter.QrKitLogoPadding
 import qrgenerator.qrkitpainter.QrKitShapes
 import qrgenerator.qrkitpainter.QrPixelType
 import qrgenerator.qrkitpainter.customBrush
@@ -92,7 +93,7 @@ import qrgenerator.qrkitpainter.rememberQrKitPainter
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
+fun QRCustomizationView(inputText: String, onNavigate: (NavigationData) -> Unit) {
     val FontSfPro = FontFamily(
         Font(Res.font.sf_pro, FontWeight.Normal),
         Font(Res.font.sf_pro_medium, FontWeight.Medium),
@@ -137,7 +138,7 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                 )
             }
         )
-        logo = if (selectedLogoIndex != -1) QrKitLogo(centerLogo) else QrKitLogo()
+        logo = if (selectedLogoIndex != -1) QrKitLogo(centerLogo, padding = QrKitLogoPadding.Natural(0.1f)) else QrKitLogo()
     }
 
 
@@ -176,7 +177,7 @@ fun QRCustomizationView(inputText: String, onNavigate: (String) -> Unit) {
                     Icons.Filled.Close,
                     "close",
                     modifier = Modifier.size(18.sdp).clickable {
-                        onNavigate(AppConstants.BACK_CLICK_ROUTE)
+                        onNavigate(NavigationData(AppConstants.BACK_CLICK_ROUTE))
                     },
                     tint = Color.White
                 )

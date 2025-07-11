@@ -78,7 +78,7 @@ import qrgenerator.qrkitpainter.rememberQrKitPainter
 import qrgenerator.shareQrCodeImage
 
 @Composable
-fun QrGeneratorView(onNavigate: (String) -> Unit) {
+fun QrGeneratorView(onNavigate: (NavigationData) -> Unit) {
     var selectedType by remember { mutableStateOf("Text") }
     var selectedIndex by remember { mutableStateOf(0) }
     var showSheet by remember { mutableStateOf(false) }
@@ -154,7 +154,7 @@ fun QrGeneratorView(onNavigate: (String) -> Unit) {
                     modifier = Modifier
                         .size(28.sdp)
                         .clickable {
-                            onNavigate(AppConstants.BACK_CLICK_ROUTE)
+                            onNavigate(NavigationData(AppConstants.BACK_CLICK_ROUTE))
                         },
                     tint = Color.White
                 )
@@ -427,7 +427,7 @@ fun QREditTextView(
 }
 
 @Composable
-fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (String) -> Unit) {
+fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (NavigationData) -> Unit) {
     val FontPoppins = FontFamily(
         Font(Res.font.poppins_regular, FontWeight.Normal),
         Font(Res.font.poppins_medium, FontWeight.Medium),
@@ -520,8 +520,9 @@ fun ColumnScope.QRCodePreview(inputText: String, onNavigate: (String) -> Unit) {
                     .align(Alignment.BottomCenter)
                     .clickable {
                         onNavigate(
-                            AppScreen.QRCustomization.route.replace(
-                                "{${AppConstants.QR_TEXT}}", inputText
+                            NavigationData(
+                                routeName = AppConstants.NAV_QR_CUSTOMISATION,
+                                data = inputText
                             )
                         )
                     },

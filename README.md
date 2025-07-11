@@ -1,6 +1,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/network.chaintech/qr-kit.svg)](https://central.sonatype.com/artifact/network.chaintech/qr-kit)
-[![Kotlin](https://img.shields.io/badge/kotlin-v2.0.20-blue.svg?logo=kotlin)](http://kotlinlang.org)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.7.0-blue)](https://github.com/JetBrains/compose-multiplatform)
+[![Kotlin](https://img.shields.io/badge/kotlin-v2.1.20-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-v1.8.3-blue)](https://github.com/JetBrains/compose-multiplatform)
 [![License](https://img.shields.io/github/license/Chaintech-Network/CMPCharts)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ![badge-android](http://img.shields.io/badge/platform-android-3DDC84.svg?style=flat)
@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.1.1")
+    implementation("network.chaintech:qr-kit:3.1.2")
 }
 ```   
 <br>

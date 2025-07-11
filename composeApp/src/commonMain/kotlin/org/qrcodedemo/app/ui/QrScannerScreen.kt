@@ -59,7 +59,7 @@ import qrscanner.OverlayShape
 import qrscanner.QrScanner
 
 @Composable
-fun QrScannerView(onNavigate: (String) -> Unit) {
+fun QrScannerView(onNavigate: (NavigationData) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -158,7 +158,7 @@ fun QrScannerView(onNavigate: (String) -> Unit) {
                 )
             }
 
-            TopBar(onClose = { onNavigate(AppConstants.BACK_CLICK_ROUTE) })
+            TopBar(onClose = { onNavigate(NavigationData(AppConstants.BACK_CLICK_ROUTE)) })
         }
     }
 }
