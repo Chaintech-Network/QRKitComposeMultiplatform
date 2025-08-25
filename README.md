@@ -18,7 +18,7 @@ To use QRKit in your Compose Multiplatform project, add the following dependency
 
 ```kotlin
 commonMain.dependencies {
-    implementation("network.chaintech:qr-kit:3.1.2")
+    implementation("network.chaintech:qr-kit:3.1.3")
 }
 ```   
 <br>
@@ -41,6 +41,22 @@ commonMain.dependencies {
     ```xml
     <key>NSCameraUsageDescription</key><string>$(PRODUCT_NAME) camera description.</string>
     <key>NSPhotoLibraryUsageDescription</key><string>$(PRODUCT_NAME) photos description.</string>
+    ```
+
+- **Note**: Create an Application Class and add the following line (Otherwise you might face error):
+
+    ```kotlin
+    class MyApplication : Application() {
+        companion object {
+            lateinit var INSTANCE: MyApplication
+        }
+    
+        override fun onCreate() {
+            super.onCreate()
+            INSTANCE = this
+            AppContext.apply { set(applicationContext) }
+        }
+    }
     ```
 
 - **Important Note**: if you are getting Manifest Merger Failed issue, add the following to your Android Manifest file:

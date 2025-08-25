@@ -100,7 +100,7 @@ fun QrScannerView(onNavigate: (NavigationData) -> Unit) {
                 overlayShape = overlayShape
             )
 
-            if (platformName() != "Desktop") {
+            if ((platformName() != "Desktop") && (platformName() != "Web")) {
                 BottomActions(
                     flashlightOn = flashlightOn,
                     onToggleFlash = {

@@ -1,26 +1,27 @@
 [versions]
 
 accompanistPermissions = "0.36.0"
-agp = "8.6.1"
+agp = "8.9.3"
 barcodeScanning = "17.3.0"
 cameraCore = "1.4.2"
-cmpImagePickNCrop = "1.0.9"
+cmpImagePickNCrop = "1.1.2"
 core = "3.5.2"
-coreKtx = "1.16.0"
+coreKtx = "1.17.0"
 imageLoader = "1.9.0"
-javase = "3.4.1"
+javase = "3.5.1"
 jna = "5.14.0"
-kotlin = "2.1.20"
+kotlin = "2.2.0"
 compose = "1.8.2"
 androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.1"
-compose-uitooling = "1.8.3"
+compose-uitooling = "1.9.0"
 navigationCompose = "2.9.0-beta03"
-androidx-uiTest = "1.8.3"
+androidx-uiTest = "1.9.0"
 kotlin-serialization = "1.8.20"
+mavenPublishVersion = "0.31.0"
 
-qrKit = "3.1.1"
-sdpSspComposeMultiplatform = "1.0.4"
+qrKit = "3.1.3"
+sdpSspComposeMultiplatform = "1.0.7"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -49,7 +50,7 @@ multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotl
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.28.0" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublishVersion" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 serialization-android = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
 
